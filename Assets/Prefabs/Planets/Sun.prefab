@@ -122,6 +122,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2118441172088171519, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_Mass
+      value: 100000
+      objectReference: {fileID: 0}
     - target: {fileID: 5210143920055906211, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
         type: 3}
       propertyPath: m_RootOrder
