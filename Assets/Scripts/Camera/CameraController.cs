@@ -20,6 +20,10 @@ namespace Mattordev.Utils
         public int zoomSensitivity = 10;
         private float currentScale;
 
+        [Header("Camera Movement Variables")]
+        public float xMovementSensitivity = 5f;
+        public float yMovementSensitivity = 5f;
+
         // Background Variables
         [Header("BG Variables")]
         public GameObject background;
@@ -34,6 +38,7 @@ namespace Mattordev.Utils
         // Update is called once per frame
         void Update()
         {
+            MoveCameraWithKeyboardInput();
             ZoomScale();
         }
 
@@ -58,6 +63,16 @@ namespace Mattordev.Utils
         {
             float calculatedScale = currentScale / 5;
             background.transform.localScale = new Vector3(calculatedScale, calculatedScale, calculatedScale) ;
+        }
+
+        public void MoveCameraWithKeyboardInput()
+        {
+            float x = Input.GetAxis("Horizontal") * Time.deltaTime * xMovementSensitivity;
+            float y = Input.GetAxis("Vertical") * Time.deltaTime * yMovementSensitivity;
+
+            Vector2 move = new Vector2(x, y);
+
+            mainCamera.transform.position += new Vector3(move.x, move.y);
         }
     }
 }
