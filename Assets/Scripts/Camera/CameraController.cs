@@ -21,8 +21,8 @@ namespace Mattordev.Utils
         private float currentScale;
 
         [Header("Camera Movement Variables")]
-        public float xMovementSensitivity = 5f;
-        public float yMovementSensitivity = 5f;
+        public float xMovementSensitivity = 100f;
+        public float yMovementSensitivity = 100f;
 
         // Background Variables
         [Header("BG Variables")]
