@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Authored & Written by <NAME/TAG/SOCIAL LINK>
+/// Authored & Written by @mattordev
 /// 
 /// for external use, please contact me directly
 /// </summary>
