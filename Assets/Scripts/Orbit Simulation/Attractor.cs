@@ -14,7 +14,8 @@ namespace Mattordev.Universe
         public static List<Attractor> attractors;
         public Rigidbody2D rb;
         public Vector2 initialVelocity;
-        public Vector2 currentVelocity;
+        private Vector2 currentVelocity;
+        public float _currentVelocity;
 
         UniverseParameters universeParameters;
 
@@ -29,9 +30,10 @@ namespace Mattordev.Universe
                 if (attractor != this)
                 {
                     Attract(attractor);
-                    Debug.Log(currentVelocity);
                 }
             }
+
+            _currentVelocity = rb.velocity.y;
         }
 
         private void OnEnable() {
