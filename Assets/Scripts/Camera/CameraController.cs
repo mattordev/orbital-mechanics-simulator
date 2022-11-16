@@ -107,8 +107,9 @@ namespace Mattordev.Utils
                 transform.parent = null;
                 return;
             }
-            //Vector2 newCameraPos = Vector2.SmoothDamp(transform.position, pos, ref posVelocity, amountOfSmoothing);
-            transform.position = new Vector3(target.position.x, target.position.y, -10);
+            Vector2 newCameraPos = Vector2.SmoothDamp(transform.position, target.position, ref posVelocity, amountOfSmoothing);
+            //transform.position = new Vector3(target.position.x, target.position.y, -10);
+            transform.position = new Vector3(newCameraPos.x, newCameraPos.y, -10);
             transform.parent = target;
         }
     }
