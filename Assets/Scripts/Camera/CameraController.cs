@@ -26,7 +26,15 @@ namespace Mattordev.Utils
 
         // Background Variables
         [Header("BG Variables")]
+        public bool scaleBackground = true;
         public GameObject background;
+
+        [Header("Focus Variables")]
+        public float amountOfSmoothing;
+        public GameObject currentlyFocusedOn;
+        private Vector2 smoothedCameraPos;
+        private Vector2 posVelocity; 
+        private bool focusing;       
 
         // Start is called before the first frame update
         void Start()
@@ -40,6 +48,10 @@ namespace Mattordev.Utils
         {
             MoveCameraWithKeyboardInput();
             ZoomScale();
+            
+            // Focusing
+            UpdateSmoothDampPos();
+            FocusOnObject();
         }
 
         /// <summary>
@@ -53,11 +65,13 @@ namespace Mattordev.Utils
             mainCamera.orthographicSize = currentScale;
 
             // Scale the background with the screensize
-            ScaleBackground();
+            if(scaleBackground)
+                ScaleBackground();
         }
 
         /// <summary>
         /// Scales the background based on the cameras size.
+        /// This needs some fixing, as there's some strange behaviour when fully zoomed
         /// </summary>
         private void ScaleBackground()
         {
@@ -65,6 +79,9 @@ namespace Mattordev.Utils
             background.transform.localScale = new Vector3(calculatedScale, calculatedScale, calculatedScale) ;
         }
 
+        /// <summary>
+        /// Allows the use of camera movement with keyboard input.
+        /// </summary>
         public void MoveCameraWithKeyboardInput()
         {
             float x = Input.GetAxis("Horizontal") * Time.deltaTime * xMovementSensitivity;
@@ -73,6 +90,47 @@ namespace Mattordev.Utils
             Vector2 move = new Vector2(x, y);
 
             mainCamera.transform.position += new Vector3(move.x, move.y);
+        }
+
+        private void FocusOnObject()
+        {
+            Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+                MoveToClickedTarget(hit.transform);
+            }
+        }
+
+        private void MoveToClickedTarget(Transform target)
+        {
+            if (target == null) {
+                transform.parent = null;
+                currentlyFocusedOn = null;
+                focusing = false;
+                return;
+            }
+            // Tell the rest of the script that a planet has been focused
+            focusing = true;
+            // Set the inspector variable.
+            currentlyFocusedOn = target.gameObject;
+            //transform.position = new Vector3(target.position.x, target.position.y, -10);
+            
+            transform.parent = target;
+        }
+
+        void UpdateSmoothDampPos()
+        {
+            // If we're not focusing, return out of the function.
+            if (!focusing)
+            {
+                return;
+            }
+            // Create the smooth camera pos based on the cameras current location and the focused target.
+            smoothedCameraPos = Vector2.SmoothDamp(transform.position, currentlyFocusedOn.transform.position, ref posVelocity, amountOfSmoothing);
+            // Move the camera to the new target, whilst keeping the z value intact
+            transform.position = new Vector3(smoothedCameraPos.x, smoothedCameraPos.y, -10);
         }
     }
 }
