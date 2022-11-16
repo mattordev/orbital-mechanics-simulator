@@ -23,14 +23,18 @@ namespace Mattordev.Utils
         [Header("Camera Movement Variables")]
         public float xMovementSensitivity = 100f;
         public float yMovementSensitivity = 100f;
-        public float amountOfSmoothing;
-        private Vector2 posVelocity; 
-        private bool focusing;       
 
         // Background Variables
         [Header("BG Variables")]
         public bool scaleBackground = true;
         public GameObject background;
+
+        [Header("Focus Variables")]
+        public float amountOfSmoothing;
+        public GameObject currentlyFocusedOn;
+        private Vector2 smoothedCameraPos;
+        private Vector2 posVelocity; 
+        private bool focusing;       
 
         // Start is called before the first frame update
         void Start()
@@ -44,6 +48,9 @@ namespace Mattordev.Utils
         {
             MoveCameraWithKeyboardInput();
             ZoomScale();
+            
+            // Focusing
+            UpdateSmoothDampPos();
             FocusOnObject();
         }
 
@@ -92,12 +99,7 @@ namespace Mattordev.Utils
 
             if (Input.GetButtonDown("Fire1"))
             {
-                // if(hit.transform.tag == "Planet")
-                // {
-                //Debug.Log("Player is focusing on " + hit.transform.name);
                 MoveToClickedTarget(hit.transform);
-                    
-                // }
             }
         }
 
@@ -105,12 +107,30 @@ namespace Mattordev.Utils
         {
             if (target == null) {
                 transform.parent = null;
+                currentlyFocusedOn = null;
+                focusing = false;
                 return;
             }
-            Vector2 newCameraPos = Vector2.SmoothDamp(transform.position, target.position, ref posVelocity, amountOfSmoothing);
+            // Tell the rest of the script that a planet has been focused
+            focusing = true;
+            // Set the inspector variable.
+            currentlyFocusedOn = target.gameObject;
             //transform.position = new Vector3(target.position.x, target.position.y, -10);
-            transform.position = new Vector3(newCameraPos.x, newCameraPos.y, -10);
+            
             transform.parent = target;
+        }
+
+        void UpdateSmoothDampPos()
+        {
+            // If we're not focusing, return out of the function.
+            if (!focusing)
+            {
+                return;
+            }
+            // Create the smooth camera pos based on the cameras current location and the focused target.
+            smoothedCameraPos = Vector2.SmoothDamp(transform.position, currentlyFocusedOn.transform.position, ref posVelocity, amountOfSmoothing);
+            // Move the camera to the new target, whilst keeping the z value intact
+            transform.position = new Vector3(smoothedCameraPos.x, smoothedCameraPos.y, -10);
         }
     }
 }
