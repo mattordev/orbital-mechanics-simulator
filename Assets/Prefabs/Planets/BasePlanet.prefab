@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2118441172088171519}
   - component: {fileID: 5531495618291111472}
   - component: {fileID: 4895349158000957738}
+  - component: {fileID: 334480031202554091}
   m_Layer: 0
   m_Name: BasePlanet
   m_TagString: Planet
@@ -55,7 +56,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -139,3 +140,57 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 5.12
+--- !u!114 &334480031202554091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6680365931150873878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d19a4b1c1b2dc28a
+  m_ShapePath:
+  - {x: -5.16, y: -0.17999999, z: 0}
+  - {x: -5.12, y: 0.97999996, z: 0}
+  - {x: -4.72, y: 2.08, z: 0}
+  - {x: -4.2799997, y: 3.04, z: 0}
+  - {x: -3.54, y: 3.84, z: 0}
+  - {x: -2.78, y: 4.42, z: 0}
+  - {x: -1.9, y: 4.8199997, z: 0}
+  - {x: -0.91999996, y: 5.04, z: 0}
+  - {x: 0.04, y: 5.16, z: 0}
+  - {x: 1.1, y: 5.08, z: 0}
+  - {x: 1.9799999, y: 4.72, z: 0}
+  - {x: 2.86, y: 4.2799997, z: 0}
+  - {x: 3.6999998, y: 3.76, z: 0}
+  - {x: 4.5, y: 2.6399999, z: 0}
+  - {x: 4.9, y: 1.54, z: 0}
+  - {x: 5.16, y: 0, z: 0}
+  - {x: 5.12, y: -0.88, z: 0}
+  - {x: 4.9, y: -1.7199999, z: 0}
+  - {x: 4.42, y: -2.56, z: 0}
+  - {x: 3.62, y: -3.58, z: 0}
+  - {x: 2.86, y: -4.2, z: 0}
+  - {x: 2.08, y: -4.68, z: 0}
+  - {x: 1.06, y: -4.98, z: 0}
+  - {x: 0, y: -5.16, z: 0}
+  - {x: -1.1999999, y: -5.04, z: 0}
+  - {x: -2.1599998, y: -4.72, z: 0}
+  - {x: -2.8799999, y: -4.24, z: 0}
+  - {x: -3.76, y: -3.56, z: 0}
+  - {x: -4.2387605, y: -3.0466092, z: 0}
+  - {x: -4.68, y: -2.2, z: 0}
+  - {x: -4.98, y: -1.28, z: 0}
+  m_ShapePathHash: 1932048738
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 24720
