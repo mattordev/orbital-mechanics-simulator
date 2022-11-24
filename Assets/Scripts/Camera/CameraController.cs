@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
+/// <author>
 /// Authored & Written by @mattordev
 /// 
-/// for external use, please contact me directly
-/// </summary>
+/// for external use, please contact the author directly
+/// </author>
 namespace Mattordev.Utils
 {
     public class CameraController : MonoBehaviour
@@ -33,14 +33,14 @@ namespace Mattordev.Utils
         public float amountOfSmoothing;
         public GameObject currentlyFocusedOn;
         private Vector2 smoothedCameraPos;
-        private Vector2 posVelocity; 
-        private bool focusing;       
+        private Vector2 posVelocity;
+        private bool focusing;
 
         // Start is called before the first frame update
         void Start()
         {
             // Set the camera object to whatever the main camera is.
-            mainCamera = Camera.main;   
+            mainCamera = Camera.main;
         }
 
         // Update is called once per frame
@@ -48,7 +48,7 @@ namespace Mattordev.Utils
         {
             MoveCameraWithKeyboardInput();
             ZoomScale();
-            
+
             // Focusing
             UpdateSmoothDampPos();
             FocusOnObject();
@@ -65,7 +65,7 @@ namespace Mattordev.Utils
             mainCamera.orthographicSize = currentScale;
 
             // Scale the background with the screensize
-            if(scaleBackground)
+            if (scaleBackground)
                 ScaleBackground();
         }
 
@@ -76,7 +76,7 @@ namespace Mattordev.Utils
         private void ScaleBackground()
         {
             float calculatedScale = currentScale / 5;
-            background.transform.localScale = new Vector3(calculatedScale, calculatedScale, calculatedScale) ;
+            background.transform.localScale = new Vector3(calculatedScale, calculatedScale, calculatedScale);
         }
 
         /// <summary>
@@ -105,7 +105,8 @@ namespace Mattordev.Utils
 
         private void MoveToClickedTarget(Transform target)
         {
-            if (target == null) {
+            if (target == null)
+            {
                 transform.parent = null;
                 currentlyFocusedOn = null;
                 focusing = false;
@@ -116,7 +117,7 @@ namespace Mattordev.Utils
             // Set the inspector variable.
             currentlyFocusedOn = target.gameObject;
             //transform.position = new Vector3(target.position.x, target.position.y, -10);
-            
+
             transform.parent = target;
         }
 

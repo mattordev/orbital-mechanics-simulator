@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
+/// <author>
 /// Authored & Written by @mattordev
 /// 
-/// for external use, please contact me directly
-/// </summary>
+/// for external use, please contact the author directly
+/// </author>
 namespace Mattordev.Universe
 {
     public class Attractor : MonoBehaviour
@@ -19,13 +19,15 @@ namespace Mattordev.Universe
 
         UniverseParameters universeParameters;
 
-        private void Awake() {
+        private void Awake()
+        {
             universeParameters = FindObjectOfType<UniverseParameters>();
             currentVelocity = initialVelocity;
         }
 
-        private void FixedUpdate() {
-            foreach(Attractor attractor in attractors)
+        private void FixedUpdate()
+        {
+            foreach (Attractor attractor in attractors)
             {
                 if (attractor != this)
                 {
@@ -36,7 +38,8 @@ namespace Mattordev.Universe
             _currentVelocity = rb.velocity.y;
         }
 
-        private void OnEnable() {
+        private void OnEnable()
+        {
             if (attractors == null)
             {
                 attractors = new List<Attractor>();
@@ -44,23 +47,24 @@ namespace Mattordev.Universe
             attractors.Add(this);
         }
 
-        private void OnDisable() {
+        private void OnDisable()
+        {
             attractors.Remove(this);
         }
 
-        void Attract (Attractor objToAttract)
+        void Attract(Attractor objToAttract)
         {
             Rigidbody2D rbToAttract = objToAttract.rb;
 
             Vector2 direction = rb.position - rbToAttract.position;
             float distance = direction.magnitude;
 
-            if(distance == 0f)
+            if (distance == 0f)
             {
                 return;
             }
 
-            float forceMagnitude = universeParameters.gravitationalConstant * (rb.mass * rbToAttract.mass) / Mathf.Pow (distance, 2);
+            float forceMagnitude = universeParameters.gravitationalConstant * (rb.mass * rbToAttract.mass) / Mathf.Pow(distance, 2);
             Vector2 force = direction.normalized * forceMagnitude;
             Vector2 acceleration = force / rb.mass;
 

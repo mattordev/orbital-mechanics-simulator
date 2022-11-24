@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Authored & Written by <NAME/TAG/SOCIAL LINK>
+/// <author>
+/// Authored & Written by @mattordev
 /// 
-/// for external use, please contact me directly
-/// </summary>
+/// for external use, please contact the author directly
+/// </author>
 namespace Mattordev.Universe
 {
     public class BodySimulation : MonoBehaviour
@@ -14,7 +14,8 @@ namespace Mattordev.Universe
         Attractor[] bodies;
         UniverseParameters universeParameters;
 
-        private void Awake() {
+        private void Awake()
+        {
             universeParameters = FindObjectOfType<UniverseParameters>();
             bodies = FindObjectsOfType<Attractor>();
         }

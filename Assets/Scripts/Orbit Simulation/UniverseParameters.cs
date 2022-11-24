@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
+/// <author>
 /// Authored & Written by @mattordev
 /// 
-/// for external use, please contact me directly
-/// </summary>
+/// for external use, please contact the author directly
+/// </author>
 namespace Mattordev.Universe
 {
     /// <summary>
@@ -17,7 +17,8 @@ namespace Mattordev.Universe
         public float physicsTimeStep;
         public float gravitationalConstant = 9.617f;
 
-        private void Awake() {
+        private void Awake()
+        {
             physicsTimeStep = Time.fixedDeltaTime;
         }
     }

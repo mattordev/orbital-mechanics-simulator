@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
+/// <author>
 /// Authored & Written by @mattordev
 /// 
-/// for external use, please contact me directly
-/// </summary>
+/// for external use, please contact the author directly
+/// </author>
 namespace Mattordev
 {
     public class PauseMenuController : MonoBehaviour
