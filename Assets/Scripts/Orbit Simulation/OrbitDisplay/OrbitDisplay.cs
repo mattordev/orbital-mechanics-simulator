@@ -31,7 +31,7 @@ namespace Mattordev
         // Start is called before the first frame update
         void Start()
         {
-            if (Application.isPlaying)
+            if (Application.isPlaying && hideOrbitPathsOnPlay)
             {
                 HideOrbits();
             }
@@ -111,9 +111,6 @@ namespace Mattordev
 
             for (int bodyIndex = 0; bodyIndex < virtualBodies.Length; bodyIndex++)
             {
-                // Set the path color
-                var _pathColour = pathColor;
-
                 // If we're using thick lines..
                 if (useThickLines)
                 {
@@ -121,8 +118,8 @@ namespace Mattordev
                     lr.enabled = true;
                     lr.positionCount = drawPoints[bodyIndex].Length;
                     lr.SetPositions(drawPoints[bodyIndex]);
-                    lr.startColor = _pathColour;
-                    lr.endColor = _pathColour;
+                    lr.startColor = pathColor;
+                    lr.endColor = pathColor;
                     lr.widthMultiplier = width;
                 }
                 else

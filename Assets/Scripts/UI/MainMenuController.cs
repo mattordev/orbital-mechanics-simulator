@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// 
 /// for external use, please contact the author directly
 /// </author>
-namespace Mattordev
+namespace Mattordev.UI
 {
     public class MainMenuController : MonoBehaviour
     {
