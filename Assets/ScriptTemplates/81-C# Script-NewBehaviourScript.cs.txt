@@ -8,7 +8,7 @@ using UnityEngine;
 /// for external use, please contact the author directly
 /// </author>
 namespace Mattordev
-{\
+{
     public class #SCRIPTNAME# : MonoBehaviour
     {
         // Start is called before the first frame update
