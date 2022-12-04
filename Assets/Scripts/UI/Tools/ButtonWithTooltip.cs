@@ -21,7 +21,7 @@ namespace Mattordev.UI.Tools
 
         public void Start()
         {
-            Application.focusChanged += () => panel.OnFocusChanged(IsHighlighted());
+            //Application.focusChanged += () => panel.OnFocusChanged(IsHighlighted());
         }
 
         public override void OnPointerEnter(PointerEventData eventData)

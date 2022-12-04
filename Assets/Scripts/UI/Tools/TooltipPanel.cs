@@ -67,8 +67,6 @@ namespace Mattordev.UI.Tools
             Vector3 offset = (Vector3)rect.sizeDelta / 2;
             Vector3 mousePos = Input.mousePosition;
             transform.position = mousePos += offset;
-
-            print((Vector3)rect.sizeDelta);
         }
 
         public void EnableTooltip(bool enabled)
