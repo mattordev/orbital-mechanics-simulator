@@ -34,7 +34,7 @@ namespace Mattordev.Utils
         public GameObject currentlyFocusedOn;
         private Vector2 smoothedCameraPos;
         private Vector2 posVelocity;
-        private bool focusing;
+        public bool focusing;
 
         // Start is called before the first frame update
         void Start()
