@@ -14,6 +14,10 @@ namespace Mattordev.UI
         public KeyCode keyToActivate;
         public Canvas utilCanvas;
 
+        [Header("Canvas Elements")]
+        public GameObject utilWindow;
+        public GameObject additionWindow;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -33,12 +37,19 @@ namespace Mattordev.UI
             if (Input.GetKeyDown(key))
             {
                 Toggle();
+                ResetUI();
             }
         }
 
         void Toggle()
         {
             utilCanvas.enabled = !utilCanvas.enabled;
+        }
+
+        void ResetUI()
+        {
+            utilWindow.SetActive(true);
+            additionWindow.SetActive(false);
         }
     }
 }

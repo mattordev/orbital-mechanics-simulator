@@ -195,7 +195,7 @@ MonoBehaviour:
   - {x: -4.98, y: -1.28, z: 0}
   m_ShapePathHash: 1932048738
   m_Mesh: {fileID: 0}
-  m_InstanceId: 24508
+  m_InstanceId: 33266
 --- !u!120 &5693565814576605480
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -303,7 +303,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6680365931150873878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

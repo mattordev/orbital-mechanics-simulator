@@ -19,7 +19,7 @@ namespace Mattordev.Utils.Stats
         public List<Attractor> attractors;
         public int numberOfBodies;
         public int totalMassOfBodies;
-        public float simulationRuntime;
+        public int simulationRuntime;
         public float simulationSpeed;
 
         // Universe Stats
@@ -90,7 +90,7 @@ namespace Mattordev.Utils.Stats
             #region General
             numberOfBodies = attractors.Count;
             // Total mass is gotten at the start
-            simulationRuntime = Time.timeSinceLevelLoad;
+            simulationRuntime = (int)Time.timeSinceLevelLoad;
             simulationSpeed = Time.deltaTime;
             #endregion
 
