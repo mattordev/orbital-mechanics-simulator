@@ -94,8 +94,8 @@ namespace Mattordev.Utils
 
         private void FocusOnObject()
         {
-            Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
 
             if (Input.GetButtonDown("Fire1"))
             {
@@ -132,6 +132,11 @@ namespace Mattordev.Utils
             smoothedCameraPos = Vector2.SmoothDamp(transform.position, currentlyFocusedOn.transform.position, ref posVelocity, amountOfSmoothing);
             // Move the camera to the new target, whilst keeping the z value intact
             transform.position = new Vector3(smoothedCameraPos.x, smoothedCameraPos.y, -10);
+        }
+
+        public Vector2 GetMousePos()
+        {
+            return mainCamera.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }
