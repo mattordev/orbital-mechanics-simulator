@@ -90,6 +90,7 @@ namespace Mattordev.Utils
             if (objectData.objNumber > objectPrefabs.Count)
             {
                 Debug.Log("Not implemented yet");
+                // Update status to say that the object isn't avaiable.
             }
 
             // Set public variable to the same as instantaited one.
