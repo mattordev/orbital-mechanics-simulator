@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
 using TMPro;
-using System;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -14,6 +13,8 @@ namespace Mattordev.Utils.Stats
 {
     public class StatisticsTracker : MonoBehaviour
     {
+        public bool updateStats = true;
+
         // General Stats
         [Header("General Statistics")]
         public List<Attractor> attractors;
@@ -62,8 +63,12 @@ namespace Mattordev.Utils.Stats
         // Update is called once per frame
         void Update()
         {
-            GetStats();
-            UpdateStats();
+            if (updateStats)
+            {
+                GetStats();
+                UpdateStats();
+            }
+
         }
 
         public void UpdateStats()
@@ -116,7 +121,7 @@ namespace Mattordev.Utils.Stats
             // Get the Closest body - TODO
             // Get the orbital period - TODO
             Attractor selectedAttractor = body.GetComponent<Attractor>();
-            bodySpeed = selectedAttractor._currentVelocity;
+            bodySpeed = int.Parse(selectedAttractor.currentVelocity.y.ToString());
             #endregion
         }
 
@@ -124,8 +129,9 @@ namespace Mattordev.Utils.Stats
         /// <summary>
         /// Called for getting the amount of bodies/attractors in the scene
         /// </summary>
-        private void GetBodies()
+        public void GetBodies()
         {
+            attractors.Clear();
             foreach (Attractor body in FindObjectsOfType<Attractor>())
             {
                 attractors.Add(body);

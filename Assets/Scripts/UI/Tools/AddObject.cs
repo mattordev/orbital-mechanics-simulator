@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
+using Mattordev.UI;
+using Mattordev.Utils.Stats;
+using TMPro;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -17,75 +20,122 @@ namespace Mattordev.Utils
 
         // placing vars
         float prevTimeScale;
-        bool placing;
+        public bool placing;
         private Vector2 smoothedPlacingPos;
         private Vector2 posVelocity;
         public float amountOfSmoothing;
+        private ObjectData objectData;
+        public UtilityUIController utilityUIController;
+        public CameraController camController;
+        public StatisticsTracker statisticsTracker;
 
         // orbit display
         public OrbitDisplay orbitDisplay;
 
         // UI
         public GameObject velocityUI;
+        private TMP_InputField inputField;
 
         // Update is called once per frame
         void Update()
         {
-            // Call the function to check if the pos of a placed object needs updating.
-            UpdateSmoothDampPos();
-
             // If an object is being placed..
             if (placing)
             {
+                utilityUIController.additionWindow.SetActive(false);
+                // Call the function to check if the pos of a placed object needs updating.
+                // UpdateSmoothDampPos();
+                selectedObject.transform.position = camController.GetMousePos();
+
                 // Player clicks to drop the object
-                if (Input.GetMouseButtonDown(2))
+                if (Input.GetMouseButtonDown(1))
                 {
                     // set placing to false to drop the planet at the current mouse pos
                     placing = false;
+
+                    Rigidbody2D rb2D = selectedObject.GetComponent<Rigidbody2D>();
+                    rb2D.simulated = false;
                 }
 
-                // Enable orbit display
+                // Enable orbit display -- DOESNT WORK
                 orbitDisplay.enabled = true;
                 orbitDisplay.hideOrbitPathsOnPlay = false;
+                orbitDisplay.useThickLines = true;
 
                 // enable UI to enter speed ?? enable drag to scale speed?
                 velocityUI.SetActive(true);
-
-                // enable attractor.cs
-                Attractor attractor = selectedObject.GetComponent<Attractor>();
-                attractor.enabled = true;
-
-                // Unpause sim 
-                Time.timeScale = prevTimeScale;
-                // Set placing to false
-                placing = false;
             }
+        }
+
+        public void SelectedObject(GameObject selectedObj)
+        {
+            Debug.Log("Setting object");
+            selectedObject = selectedObj;
+            objectData = selectedObj.GetComponent<ObjectData>();
         }
 
         public void PlaceObject()
         {
             // Pause sim
-            prevTimeScale = Time.timeScale;
-            Time.timeScale = 0;
+            SimState(false);
 
             // User selects an object
             if (!selectedObject)
             {
                 // place the default base planet
+                InstantiateObject(0);
+            }
+            // Spawn the object
+            GameObject instantiatedGO = InstantiateObject(objectData.objNumber);
+            if (objectData.objNumber > objectPrefabs.Count)
+            {
+                Debug.Log("Not implemented yet");
             }
 
-            // Get the selected object number VV this line doesn't work
-            int objectNumber = selectedObject.transform.parent.transform.hierarchyCount;
-            // Spawn the object, minus one as the prefabs start at zero
-            GameObject instantiatedGO = InstantiateObject(objectNumber - 1);
-
-            // after clicked, object follows the mouse
-            // Get ref to camera to get mouse pos
-            CameraController cameraController = Camera.main.GetComponent<CameraController>();
             // Set public variable to the same as instantaited one.
             selectedObject = instantiatedGO;
+
+            Rigidbody2D rb2D = selectedObject.GetComponent<Rigidbody2D>();
+            rb2D.simulated = false;
+
             // Tell the script we're now placing a planet.
             placing = true;
+        }
+
+        // Currently doesn't set velocity correctly.
+        public void SetInitialVelocity()
+        {
+            inputField = velocityUI.GetComponentInChildren<TMP_InputField>();
+            Attractor currentAttractor = selectedObject.GetComponent<Attractor>();
+            currentAttractor.initialVelocity.y = int.Parse(inputField.text);
+            currentAttractor.currentVelocity = currentAttractor.initialVelocity;
+
+
+            // Unpause sim 
+            SimState(true);
+            currentAttractor.UpdatePosition(statisticsTracker.universeParameters.physicsTimeStep);
+        }
+
+        /// <summary>
+        /// Used for toggling the simulation without effecting Time.timeScale.
+        /// </summary>
+        /// <param name="state"></param>
+        void SimState(bool state)
+        {
+            Debug.Log($"Simulation state: {state}");
+            statisticsTracker.GetBodies();
+            statisticsTracker.updateStats = state;
+
+            // Disable Body simulation
+            BodySimulation bodySimulation = GameObject.FindGameObjectWithTag("GameMaster").GetComponent<BodySimulation>();
+            bodySimulation.enabled = state;
+
+            // Stop simulation on the bodies
+            foreach (Attractor attractor in statisticsTracker.attractors)
+            {
+                Rigidbody2D rb2D = attractor.GetComponent<Rigidbody2D>();
+                rb2D.simulated = state;
+            }
         }
 
         GameObject InstantiateObject(int prefabNumber)

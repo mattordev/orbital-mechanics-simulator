@@ -36,6 +36,9 @@ namespace Mattordev.Utils
         private Vector2 posVelocity;
         public bool focusing;
 
+        // Other Variables
+        [SerializeField] private AddObject addObject;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -97,7 +100,7 @@ namespace Mattordev.Utils
 
             RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
 
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && !addObject.placing)
             {
                 MoveToClickedTarget(hit.transform);
             }

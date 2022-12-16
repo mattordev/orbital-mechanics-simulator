@@ -46,7 +46,7 @@ namespace Mattordev.UI
             utilCanvas.enabled = !utilCanvas.enabled;
         }
 
-        void ResetUI()
+        private void ResetUI()
         {
             utilWindow.SetActive(true);
             additionWindow.SetActive(false);
