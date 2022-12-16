@@ -121,7 +121,7 @@ namespace Mattordev.Utils.Stats
             // Get the Closest body - TODO
             // Get the orbital period - TODO
             Attractor selectedAttractor = body.GetComponent<Attractor>();
-            bodySpeed = int.Parse(selectedAttractor.currentVelocity.y.ToString());
+            bodySpeed = selectedAttractor.rb.velocity.y;
             #endregion
         }
 
