@@ -29,5 +29,11 @@ namespace Mattordev.Universe
                 bodies[i].UpdatePosition(universeParameters.physicsTimeStep);
             }
         }
+
+        public void GetBodies()
+        {
+            Attractor[] newBodies = FindObjectsOfType<Attractor>();
+            bodies = newBodies;
+        }
     }
 }

@@ -13,6 +13,9 @@ using TMPro;
 /// </author>
 namespace Mattordev.Utils
 {
+    /// <summary>
+    /// Used for Adding objects using the tools panel to the game.
+    /// </summary>
     public class AddObject : MonoBehaviour
     {
         GameObject selectedObject;

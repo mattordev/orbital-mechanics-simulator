@@ -97,7 +97,6 @@ namespace Mattordev.Utils
 
         private void FocusOnObject()
         {
-
             RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
 
             if (Input.GetButtonDown("Fire1") && !addObject.placing)

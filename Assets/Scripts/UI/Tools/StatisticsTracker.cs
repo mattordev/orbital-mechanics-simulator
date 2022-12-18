@@ -184,9 +184,21 @@ namespace Mattordev.Utils.Stats
                 return this.gameObject;
             }
 
-            GameObject body = cameraController.transform.parent.gameObject;
-            return body;
+            if (cameraController.transform.parent != null)
+            {
+                GameObject body = cameraController.transform.parent.gameObject;
+                return body;
+            }
+            return null;
+        }
 
+        public void ResetSelectedToDefault()
+        {
+            selectedBody = null;
+            selectedBodySpeedText.text = string.Empty;
+            selectedMassText.text = string.Empty;
+            selectedClosestBodyText.text = string.Empty;
+            selectedOrbitalPeriodText.text = string.Empty;
         }
 
         #endregion
