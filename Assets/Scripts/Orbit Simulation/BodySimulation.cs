@@ -34,6 +34,10 @@ namespace Mattordev.Universe
         {
             Attractor[] newBodies = FindObjectsOfType<Attractor>();
             bodies = newBodies;
+            foreach (Attractor attractor in newBodies)
+            {
+                attractor.UpdateAttractors();
+            }
         }
     }
 }

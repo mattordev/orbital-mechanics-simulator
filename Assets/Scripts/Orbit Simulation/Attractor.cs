@@ -72,5 +72,11 @@ namespace Mattordev.Universe
         {
             rb.position += currentVelocity * timeStep;
         }
+
+        public void UpdateAttractors()
+        {
+            attractors = new List<Attractor>();
+            attractors.Add(this);
+        }
     }
 }
