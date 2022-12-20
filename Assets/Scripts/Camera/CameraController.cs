@@ -38,6 +38,7 @@ namespace Mattordev.Utils
 
         // Other Variables
         [SerializeField] private AddObject addObject;
+        [SerializeField] private MoveObject moveObject;
 
         // Start is called before the first frame update
         void Start()
@@ -53,8 +54,11 @@ namespace Mattordev.Utils
             ZoomScale();
 
             // Focusing
-            UpdateSmoothDampPos();
-            FocusOnObject();
+            if (!addObject.placing || !moveObject.moving)
+            {
+                UpdateSmoothDampPos();
+                FocusOnObject();
+            }
         }
 
         /// <summary>
@@ -103,6 +107,18 @@ namespace Mattordev.Utils
             {
                 MoveToClickedTarget(hit.transform);
             }
+        }
+
+        public GameObject GetClickedItem()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
+
+            if (hit.collider == null)
+            {
+                Debug.LogError("Didn't hit a collider!");
+                return null;
+            }
+            return hit.transform.gameObject;
         }
 
         private void MoveToClickedTarget(Transform target)

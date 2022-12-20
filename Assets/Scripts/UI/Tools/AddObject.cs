@@ -51,11 +51,12 @@ namespace Mattordev.Utils
                 selectedObject.transform.position = camController.GetMousePos();
 
                 // Player clicks to drop the object
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(0))
                 {
                     // set placing to false to drop the planet at the current mouse pos
                     placing = false;
 
+                    // Disable simulation untill its speed has been set
                     Rigidbody2D rb2D = selectedObject.GetComponent<Rigidbody2D>();
                     rb2D.simulated = false;
                 }
