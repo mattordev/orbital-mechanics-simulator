@@ -54,8 +54,9 @@ namespace Mattordev.Utils
             ZoomScale();
 
             // Focusing
-            if (!addObject.placing || !moveObject.moving)
+            if (!moveObject.moving)
             {
+
                 UpdateSmoothDampPos();
                 FocusOnObject();
             }

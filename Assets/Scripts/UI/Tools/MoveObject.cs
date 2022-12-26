@@ -24,16 +24,23 @@ namespace Mattordev.Utils
         public CameraController cameraController;
         public StatisticsTracker statisticsTracker;
 
+        List<Vector2> savedVelocities = new List<Vector2>();
+        long prevFixedDeltaTime;
+
         private void Start()
         {
             mainCam = Camera.main;
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             if (moving)
             {
+                if (selectedObject != null)
+                {
+                    selectedObject.transform.position = cameraController.GetMousePos();
+                }
                 MoveObjectToMouse();
             }
         }
@@ -41,7 +48,6 @@ namespace Mattordev.Utils
         public void StartObjectMove()
         {
             moving = true;
-            SimState(false);
         }
 
         void MoveObjectToMouse()
@@ -52,8 +58,7 @@ namespace Mattordev.Utils
                 selectedObject = hit.transform.gameObject;
 
                 Debug.Log(selectedObject);
-                SimState(true);
-                selectedObject.transform.position = cameraController.GetMousePos();
+
             }
 
             // Player clicks to drop the object
@@ -61,7 +66,7 @@ namespace Mattordev.Utils
             {
                 // set moving to false to drop the planet at the current mouse pos
                 moving = false;
-                SimState(true);
+                selectedObject = null;
             }
         }
 
@@ -71,40 +76,56 @@ namespace Mattordev.Utils
         /// TODO: FIGURE OUT HOW TO FREEZE RIGIBODIES WHILST THEY STAY SIMULATED OTHERWISE RAYCASTS DONT WORK
         /// </summary>
         /// <param name="state"></param>
-        public void SimState(bool state)
-        {
-            Debug.Log($"Simulation state: {state}");
+        // public void SimState(bool state)
+        // {
+        //     Debug.Log($"Simulation state: {state}");
 
-            // Disable Body simulation
-            BodySimulation bodySimulation = GameObject.FindGameObjectWithTag("GameMaster").GetComponent<BodySimulation>();
-            bodySimulation.enabled = state;
+        //     // Disable Body simulation
+        //     BodySimulation bodySimulation = GameObject.FindGameObjectWithTag("GameMaster").GetComponent<BodySimulation>();
+        //     bodySimulation.enabled = state;
 
-            if (state == true)
-            {
-                UnfreezePosition();
-            }
-            else
-            {
-                FreezePosition();
-            }
+        //     if (state == true)
+        //     {
+        //         UnfreezePosition();
+        //     }
+        //     else
+        //     {
+        //         FreezePosition();
+        //     }
 
-            // Stop simulation on the bodies
-            foreach (Attractor attractor in statisticsTracker.attractors)
-            {
-                attractor.enabled = state;
-            }
-        }
+        //     // Stop simulation on the bodies
+        //     foreach (Attractor attractor in statisticsTracker.attractors)
+        //     {
+        //         attractor.enabled = state;
+        //     }
+        // }
 
-        // Freeze the position of the game object
-        void FreezePosition()
-        {
+        // // Freeze the position of the game objects
+        // void FreezePosition()
+        // {
+        //     prevFixedDeltaTime = (long)Time.fixedDeltaTime;
+        //     Time.fixedDeltaTime = 0;
+        //     foreach (Attractor attractor in statisticsTracker.attractors)
+        //     {
+        //         Rigidbody2D rb2D = attractor.GetComponent<Rigidbody2D>();
+        //         savedVelocities.Add(rb2D.velocity);
+        //         rb2D.velocity = Vector2.zero;
 
-        }
+        //     }
+        // }
 
-        // Reapply the saved velocity
-        void UnfreezePosition()
-        {
-
-        }
+        // // Reapply the saved velocity
+        // void UnfreezePosition()
+        // {
+        //     Time.fixedDeltaTime = prevFixedDeltaTime;
+        //     foreach (Attractor attractor in statisticsTracker.attractors)
+        //     {
+        //         foreach (Vector2 velocity in savedVelocities)
+        //         {
+        //             Rigidbody2D rb2D = attractor.GetComponent<Rigidbody2D>();
+        //             rb2D.velocity = velocity;
+        //         }
+        //     }
+        // }
     }
 }
