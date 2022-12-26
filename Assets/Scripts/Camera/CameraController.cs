@@ -122,7 +122,7 @@ namespace Mattordev.Utils
             return hit.transform.gameObject;
         }
 
-        private void MoveToClickedTarget(Transform target)
+        public void MoveToClickedTarget(Transform target)
         {
             if (target == null)
             {

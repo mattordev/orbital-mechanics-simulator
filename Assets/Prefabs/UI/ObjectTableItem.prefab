@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 1637873014181601447}
   - component: {fileID: 1266801600058314894}
   - component: {fileID: 3279347946953761690}
-  - component: {fileID: 6573328000181470812}
+  - component: {fileID: 6220188735123203824}
   m_Layer: 5
   m_Name: ObjectTableItem
   m_TagString: Untagged
@@ -655,8 +655,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1266801600058314894}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &6573328000181470812
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6220188735123203824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -671,6 +683,10 @@ MonoBehaviour:
   nameText: {fileID: 4004260233860875658}
   massText: {fileID: 5933185472791311200}
   speedText: {fileID: 3078058928250832058}
+  image: {fileID: 4873329866859694012}
+  attractor: {fileID: 0}
+  button: {fileID: 3279347946953761690}
+  tableGenerator: {fileID: 0}
 --- !u!1 &6551070427453784498
 GameObject:
   m_ObjectHideFlags: 0
