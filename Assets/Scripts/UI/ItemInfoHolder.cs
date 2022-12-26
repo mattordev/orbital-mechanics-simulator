@@ -33,5 +33,25 @@ namespace Mattordev.UI
             tableGenerator = FindObjectOfType<TableGenerator>();
             button.onClick.AddListener(() => tableGenerator.TableClickToFocus(button.gameObject));
         }
+
+
+        /// <summary>
+        /// Populates the item fields with the correct parameters. 
+        /// </summary>
+        /// <param name="attractor"> Attractor object, all other variables are gotten from this</param>
+        public void SetInfo(Attractor attractor)
+        {
+            this.attractor = attractor;
+
+            SpriteRenderer spriteRenderer = attractor.GetComponent<SpriteRenderer>();
+            image.sprite = spriteRenderer.sprite;
+
+            Rigidbody2D rb2D = attractor.GetComponent<Rigidbody2D>();
+
+            nameText.text = attractor.gameObject.name;
+            massText.text = rb2D.mass.ToString();
+            // Need to get these to update dynamically as the speed changes
+            speedText.text = rb2D.velocity.y.ToString();
+        }
     }
 }

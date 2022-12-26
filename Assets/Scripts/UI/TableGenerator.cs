@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
 using Mattordev.Utils;
-using UnityEngine.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -61,10 +60,13 @@ namespace Mattordev.UI
                     // Set the item to be a child of content gameobject
                     item.transform.SetParent(content.transform, false);
                     Debug.Log($"Spawning {item.name}");
-                    // Populate the item fields by passing in the needed params
-                    PopulateItemFields(item, attractor, attractor.GetComponent<SpriteRenderer>(), attractor.name, attractor.GetComponent<Rigidbody2D>().mass, attractor.GetComponent<Rigidbody2D>().velocity.y);
+                    // Get the info holder, pass in the attractor and call the SetInfo Function
+                    ItemInfoHolder info = item.GetComponent<ItemInfoHolder>();
+                    info.SetInfo(attractor);
                 }
+                // Find the table items in the scene, add them to the list.
                 FindTableItems();
+                // Mark the table as setup to avoid it being run again.
                 hasTableBeenSetup = true;
                 Debug.Log($"Table has been setup. Added {tableItems.Count} items to the table.");
             }
@@ -74,13 +76,15 @@ namespace Mattordev.UI
         #region Table Item Getting/Cleaning
 
         /// <summary>
-        /// Finds all the table items in the scene if there is any
+        /// Clears the tableItems list, 
+        /// then it finds all the table items in the scene if there is any, adds them to the tableItems list.
         /// </summary>
         void FindTableItems()
         {
             // Clear the list to avoid duplication
             tableItems.Clear();
 
+            // For each info holder that can be found in the scene
             foreach (ItemInfoHolder item in FindObjectsOfType<ItemInfoHolder>())
             {
                 // Add the current iterator.
@@ -88,6 +92,9 @@ namespace Mattordev.UI
             }
         }
 
+        /// <summary>
+        /// Finds all table items, and then removes them from the scene/clears the table.
+        /// </summary>
         void ClearTableItems()
         {
             // Find table items
@@ -99,6 +106,7 @@ namespace Mattordev.UI
                 return;
             }
 
+            // For each item that is in tableItems list
             foreach (GameObject item in tableItems)
             {
                 // Remove item from the list
@@ -117,34 +125,15 @@ namespace Mattordev.UI
         /// </summary>
         public void GetAttractors()
         {
+            // Clear the attractors list
             attractors.Clear();
+            // For each attractor script in the scene
             foreach (Attractor body in FindObjectsOfType<Attractor>())
             {
+                // Add the current iterator to the list
                 attractors.Add(body);
             }
             Debug.Log($"Sucessfully found {attractors.Count} bodies");
-        }
-
-
-        /// <summary>
-        /// Populates the item fields with the correct parameters. 
-        /// </summary>
-        /// <param name="item"> Item object, used for getting reference to the ItemTextHolder.</param>
-        /// /// <param name="attractor"> Attractor, used for focusing later.</param>
-        /// <param name="name"> The name of the body.</param>
-        /// <param name="mass"> The mass of the body.</param>
-        /// <param name="speed"> The speed of the body</param>
-        void PopulateItemFields(GameObject item, Attractor attractor, SpriteRenderer image, string name, float mass, float speed)
-        {
-            ItemInfoHolder itemTextHolder = item.GetComponent<ItemInfoHolder>();
-            itemTextHolder.attractor = attractor;
-
-            itemTextHolder.image.sprite = image.sprite;
-
-            itemTextHolder.nameText.text = name;
-            itemTextHolder.massText.text = mass.ToString();
-            // Need to get these to update dynamically as the speed changes
-            itemTextHolder.speedText.text = speed.ToString();
         }
 
         /// <summary>
@@ -152,7 +141,9 @@ namespace Mattordev.UI
         /// </summary>
         public void TableClickToFocus(GameObject button)
         {
+            // Get reference to the info holder
             ItemInfoHolder itemTextHolder = button.GetComponent<ItemInfoHolder>();
+            // Call the camera move
             cameraController.MoveToClickedTarget(itemTextHolder.attractor.gameObject.transform);
         }
 
