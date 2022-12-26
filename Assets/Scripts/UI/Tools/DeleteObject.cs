@@ -36,11 +36,11 @@ namespace Mattordev.Utils
                 Destroy(toDelete, .2f);
                 // ?? Play animation/effect of object blowing up
 
-                // Cleanup
+                // // Cleanup
                 CleanUpAfterDeletion(toDelete);
 
-                // IF THIS IS SET TO ANYTHING LOWER THAN 1F IT BREAKS
-                StartCoroutine(WaitForToggleDeleting(2f));
+                // // IF THIS IS SET TO ANYTHING LOWER THAN 1F IT BREAKS
+                // StartCoroutine(WaitForToggleDeleting(2f));
             }
         }
 
