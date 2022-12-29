@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
 using TMPro;
+using System.Linq;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -14,6 +15,12 @@ namespace Mattordev.Utils.Stats
     public class StatisticsTracker : MonoBehaviour
     {
         public bool updateStats = true;
+        public GameObject sun;
+
+        // Used for orbital period
+        // Track the minimum and maximum distances between the two objects
+        float minDistance = float.MaxValue;
+        float maxDistance = 0;
 
         // General Stats
         [Header("General Statistics")]
@@ -32,7 +39,6 @@ namespace Mattordev.Utils.Stats
         // Selected object stats
         [Header("Selected body Statistics")]
         public float mass;
-        public string closestBody;
         public float orbitalPeriod;
         public float bodySpeed;
         private GameObject selectedBody;
@@ -52,12 +58,15 @@ namespace Mattordev.Utils.Stats
         public TMP_Text selectedOrbitalPeriodText;
         public TMP_Text selectedBodySpeedText;
 
+        public Dictionary<string, float> objectDistances = new Dictionary<string, float>();
+
 
         // Start is called before the first frame update
         void Start()
         {
             universeParameters = FindObjectOfType<UniverseParameters>();
             GetBodies();
+            GetClosestBody();
         }
 
         // Update is called once per frame
@@ -85,8 +94,9 @@ namespace Mattordev.Utils.Stats
 
             // Selected stats
             selectedMassText.text = mass.ToString();
-            selectedClosestBodyText.text = closestBody;
-            selectedOrbitalPeriodText.text = orbitalPeriod.ToString();
+            selectedClosestBodyText.text = GetClosestBody();
+            // This will need to be fixed (see the xml summary of the function)
+            //selectedOrbitalPeriodText.text = OrbitalPeriod().ToString();
             selectedBodySpeedText.text = bodySpeed.ToString();
         }
 
@@ -191,6 +201,139 @@ namespace Mattordev.Utils.Stats
             }
             return null;
         }
+
+        public float CalculateOrbitPeriod(float mass1, float mass2, float distance, float eccentricity)
+        {
+            // Calculate the semi-major axis of the elliptical orbit
+            float a = distance / (1 - eccentricity);
+
+            // Calculate the orbital period using the formula above
+            float T = 2 * Mathf.PI * Mathf.Sqrt((Mathf.Pow(a, 3)) / (universeParameters.gravitationalConstant * (mass1 + mass2)));
+
+            // Convert the orbital period to seconds
+            float orbitalPeriodInSeconds = T / 3600;
+
+
+            return orbitalPeriodInSeconds;
+        }
+
+        /// <summary>
+        /// TODO:
+        /// Calculate all orbits at the start of the game - save them to a dictionary with a name and a value for the period
+        /// Set the UI Text to whichever is selected instead of calculating it every time a planet is clicked.
+        /// 
+        /// This will increase initial overhead, but be more performant in the longrun.
+        /// </summary>
+        /// <returns>The orbital in seconds</returns>
+        public float OrbitalPeriod()
+        {
+            // Iterate through all Attractors in the list
+            foreach (Attractor attractor in attractors)
+            {
+                // Skip the distance calculation and comparison if the current Attractor is the selected body
+                if (attractor.gameObject == selectedBody)
+                {
+                    continue;
+                }
+
+                // Calculate the distance between the selected body and the current Attractor
+                float distance = Vector3.Distance(selectedBody.transform.position, attractor.transform.position);
+
+                minDistance = Mathf.Min(minDistance, distance);
+                maxDistance = Mathf.Max(maxDistance, distance);
+                CalculateApoapsisPeriapsis();
+
+                // We set the orbital period here for ease
+
+                Rigidbody2D m1Rb = selectedBody.GetComponent<Rigidbody2D>();
+                Rigidbody2D m2Rb = sun.GetComponent<Rigidbody2D>();
+
+                orbitalPeriod = CalculateOrbitPeriod(m1Rb.velocity.y, m2Rb.velocity.y, distance, CalculateEccentricity(minDistance, maxDistance));
+
+                return orbitalPeriod;
+            }
+            return 0;
+        }
+
+        public float CalculateEccentricity(float periapsis, float apoapsis)
+        {
+            // e = (apoapsis - periapsis) / (apoapsis + periapsis)
+            // Calculate the eccentricity using the formula above
+            float eccentricity = (apoapsis - periapsis) / (apoapsis + periapsis);
+
+            return eccentricity;
+        }
+
+        public void CalculateApoapsisPeriapsis()
+        {
+            // The apoapsis is the maximum distance between the two objects
+            float apoapsis = maxDistance;
+
+            // The periapsis is the minimum distance between the two objects
+            float periapsis = minDistance;
+        }
+
+        private string GetClosestBody()
+        {
+            // Get the selected body
+            GameObject selectedBody = GetSelectedBody();
+
+            // Initialize a dictionary to store the name and distance of each Attractor
+            Dictionary<string, float> distances = new Dictionary<string, float>();
+
+            // Iterate through all Attractors in the list
+            foreach (Attractor attractor in attractors)
+            {
+                // Skip the distance calculation and comparison if the current Attractor is the selected body
+                if (attractor.gameObject == selectedBody)
+                {
+                    continue;
+                }
+
+                // Calculate the distance between the selected body and the current Attractor
+                float distance = Vector3.Distance(selectedBody.transform.position, attractor.transform.position);
+
+                minDistance = Mathf.Min(minDistance, distance);
+                maxDistance = Mathf.Max(maxDistance, distance);
+                CalculateApoapsisPeriapsis();
+
+                // We set the orbital period here for ease
+
+                Rigidbody2D m1Rb = selectedBody.GetComponent<Rigidbody2D>();
+                Rigidbody2D m2Rb = sun.GetComponent<Rigidbody2D>();
+
+                orbitalPeriod = CalculateOrbitPeriod(m1Rb.velocity.y, m2Rb.velocity.y, distance, CalculateEccentricity(minDistance, maxDistance));
+
+                // Add the Attractor's name and distance to the dictionary
+                distances.Add(attractor.name, distance);
+            }
+
+            // Find the name and distance of the closest Attractor
+            string closestObjectName = "";
+            float closestDistance = Mathf.Infinity;
+            foreach (KeyValuePair<string, float> distance in distances)
+            {
+                if (distance.Value < closestDistance)
+                {
+                    closestDistance = distance.Value;
+                    closestObjectName = distance.Key;
+                }
+            }
+
+            // Draws a line between the selected obj and the closest one.
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                // Get the closest Attractor game object
+                GameObject closestAttractor = GameObject.Find(closestObjectName);
+
+                // Draw a 2D debug line between the selected body and the closest Attractor
+                Debug.DrawLine(selectedBody.transform.position, closestAttractor.transform.position, Color.red, .1f, false);
+            }
+
+            // Return the name and distance of the closest Attractor as a string
+            return $"{closestObjectName} ({closestDistance:F2})";
+        }
+
 
         public void ResetSelectedToDefault()
         {
