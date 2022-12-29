@@ -41,6 +41,7 @@ namespace Mattordev.Utils.Stats
         public float mass;
         public float orbitalPeriod;
         public float bodySpeed;
+        public string closestbody;
         private GameObject selectedBody;
 
         [Space]
@@ -94,9 +95,9 @@ namespace Mattordev.Utils.Stats
 
             // Selected stats
             selectedMassText.text = mass.ToString();
-            selectedClosestBodyText.text = GetClosestBody();
+            selectedClosestBodyText.text = closestbody;
             // This will need to be fixed (see the xml summary of the function)
-            //selectedOrbitalPeriodText.text = OrbitalPeriod().ToString();
+            selectedOrbitalPeriodText.text = orbitalPeriod.ToString();
             selectedBodySpeedText.text = bodySpeed.ToString();
         }
 
@@ -128,8 +129,8 @@ namespace Mattordev.Utils.Stats
             }
             Rigidbody2D selectedRb = body.GetComponent<Rigidbody2D>();
             mass = selectedRb.mass;
-            // Get the Closest body - TODO
-            // Get the orbital period - TODO
+            closestbody = GetClosestBody();
+            orbitalPeriod = OrbitalPeriod();
             Attractor selectedAttractor = body.GetComponent<Attractor>();
             bodySpeed = selectedAttractor.rb.velocity.y;
             #endregion
@@ -202,16 +203,25 @@ namespace Mattordev.Utils.Stats
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mass1"></param>
+        /// <param name="mass2"></param>
+        /// <param name="distance"></param>
+        /// <param name="eccentricity"></param>
+        /// <returns></returns>
         public float CalculateOrbitPeriod(float mass1, float mass2, float distance, float eccentricity)
         {
             // Calculate the semi-major axis of the elliptical orbit
             float a = distance / (1 - eccentricity);
 
+            // Keplerian formula - T = 2 * pi * sqrt(a^3 / (G * (m1 + m2)
             // Calculate the orbital period using the formula above
             float T = 2 * Mathf.PI * Mathf.Sqrt((Mathf.Pow(a, 3)) / (universeParameters.gravitationalConstant * (mass1 + mass2)));
 
             // Convert the orbital period to seconds
-            float orbitalPeriodInSeconds = T / 3600;
+            float orbitalPeriodInSeconds = T / 60;
 
 
             return orbitalPeriodInSeconds;
@@ -220,13 +230,20 @@ namespace Mattordev.Utils.Stats
         /// <summary>
         /// TODO:
         /// Calculate all orbits at the start of the game - save them to a dictionary with a name and a value for the period
-        /// Set the UI Text to whichever is selected instead of calculating it every time a planet is clicked.
+        /// Set the UI Text to whichever is selected instead of calculating it every time a planet is clicked, every frame.
         /// 
         /// This will increase initial overhead, but be more performant in the longrun.
+        /// I also need to take into account that for more complex simulations, this wont work (Keplerian formula - T = 2 * pi * sqrt(a^3 / (G * (m1 + m2))))). As the orbital period formula I've chosen
+        /// is only made to be used in 2-body systems, not more than that. To solve for this, I can start using numerical integration or, solve using
+        /// this formula in pairs - This will still work, but will become innacurate over time.
+        /// 
+        /// As another note, I might need to make that dictionary a 4D dictionary to hold the name, period, apoapsis and periapsis.
         /// </summary>
-        /// <returns>The orbital in seconds</returns>
+        /// <returns>The orbital period in seconds</returns>
         public float OrbitalPeriod()
         {
+            selectedBody = GetSelectedBody();
+
             // Iterate through all Attractors in the list
             foreach (Attractor attractor in attractors)
             {
@@ -241,20 +258,25 @@ namespace Mattordev.Utils.Stats
 
                 minDistance = Mathf.Min(minDistance, distance);
                 maxDistance = Mathf.Max(maxDistance, distance);
-                CalculateApoapsisPeriapsis();
 
-                // We set the orbital period here for ease
+                CalculateApoapsisPeriapsis();
 
                 Rigidbody2D m1Rb = selectedBody.GetComponent<Rigidbody2D>();
                 Rigidbody2D m2Rb = sun.GetComponent<Rigidbody2D>();
 
-                orbitalPeriod = CalculateOrbitPeriod(m1Rb.velocity.y, m2Rb.velocity.y, distance, CalculateEccentricity(minDistance, maxDistance));
+                orbitalPeriod = CalculateOrbitPeriod(m1Rb.mass, m2Rb.mass, distance, CalculateEccentricity(minDistance, maxDistance));
 
                 return orbitalPeriod;
             }
             return 0;
         }
 
+        /// <summary>
+        /// Calculates the eccentricity based on the apoapsis and periapsis
+        /// </summary>
+        /// <param name="periapsis"></param>
+        /// <param name="apoapsis"></param>
+        /// <returns></returns>
         public float CalculateEccentricity(float periapsis, float apoapsis)
         {
             // e = (apoapsis - periapsis) / (apoapsis + periapsis)
