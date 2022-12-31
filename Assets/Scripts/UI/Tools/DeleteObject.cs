@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
 using Mattordev.Utils.Stats;
+using Mattordev.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -18,6 +19,7 @@ namespace Mattordev.Utils
     {
         private CameraController cameraController;
         public bool deleting;
+        public TableGenerator tableGenerator;
 
         // Start is called before the first frame update
         void Start()
@@ -36,11 +38,13 @@ namespace Mattordev.Utils
                 Destroy(toDelete, .2f);
                 // ?? Play animation/effect of object blowing up
 
+                if (Input.GetMouseButtonDown(1))
+                {
+                    Debug.Log("clicked");
+                    deleting = false;
+                }
                 // // Cleanup
                 CleanUpAfterDeletion(toDelete);
-
-                // // IF THIS IS SET TO ANYTHING LOWER THAN 1F IT BREAKS
-                // StartCoroutine(WaitForToggleDeleting(2f));
             }
         }
 
@@ -70,19 +74,20 @@ namespace Mattordev.Utils
             this.deleting = deleting;
         }
 
-        public IEnumerator WaitForToggleDeleting(float seconds)
-        {
-            yield return new WaitForSeconds(seconds);
-            deleting = false;
-        }
-
         #region Error Avoidance / Clean up
         public void CleanUpAfterDeletion(GameObject itemToCleanup)
         {
+
+            Debug.ClearDeveloperConsole();
+
+            tableGenerator.RegenerateTable();
             StatisticsTracker stats = FindObjectOfType<StatisticsTracker>();
             BodySimulation bodySimulation = FindObjectOfType<BodySimulation>();
 
+
             // Clear the bodies list and get it again
+            // If this is uncommented the bodies will just go straight and not follow thier orbits
+            // if it's uncommented there's an error but that's it.
             bodySimulation.GetBodies();
             stats.attractors.Clear();
             stats.GetBodies();

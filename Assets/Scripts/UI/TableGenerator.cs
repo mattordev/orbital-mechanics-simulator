@@ -114,6 +114,13 @@ namespace Mattordev.UI
             }
         }
 
+        public void RegenerateTable()
+        {
+            ClearTableItems();
+            FindTableItems();
+            SetupTable();
+        }
+
         #endregion
 
         #region Other Functions

@@ -11,7 +11,7 @@ namespace Mattordev.Universe
 {
     public class BodySimulation : MonoBehaviour
     {
-        Attractor[] bodies;
+        public Attractor[] bodies;
         UniverseParameters universeParameters;
 
         private void Awake()
@@ -34,10 +34,6 @@ namespace Mattordev.Universe
         {
             Attractor[] newBodies = FindObjectsOfType<Attractor>();
             bodies = newBodies;
-            foreach (Attractor attractor in newBodies)
-            {
-                attractor.UpdateAttractors();
-            }
         }
     }
 }
