@@ -79,7 +79,7 @@ namespace Mattordev.UI
         /// Clears the tableItems list, 
         /// then it finds all the table items in the scene if there is any, adds them to the tableItems list.
         /// </summary>
-        void FindTableItems()
+        public void FindTableItems()
         {
             // Clear the list to avoid duplication
             tableItems.Clear();
@@ -95,11 +95,8 @@ namespace Mattordev.UI
         /// <summary>
         /// Finds all table items, and then removes them from the scene/clears the table.
         /// </summary>
-        void ClearTableItems()
+        public void ClearTableItems()
         {
-            // Find table items
-            FindTableItems();
-
             // Make sure that the tables items isn't zero
             if (tableItems.Count == 0)
             {
@@ -110,9 +107,10 @@ namespace Mattordev.UI
             foreach (GameObject item in tableItems)
             {
                 // Remove item from the list
-                tableItems.Remove(item);
+                tableItems = new List<GameObject>();
                 // Destroy the item obj
                 Destroy(item);
+                hasTableBeenSetup = false;
             }
         }
 

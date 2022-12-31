@@ -21,7 +21,8 @@ namespace Mattordev.Utils.Stats
         // Track the minimum and maximum distances between the two objects
         public float minDistance = float.MaxValue;
         public float maxDistance = 0;
-        public float periapsis, apoapsis;
+        public float periapsis = float.MaxValue; // Periapsis of the orbit in meters
+        public float apoapsis = float.MinValue; // Apoapsis of the orbit in meters
 
         // General Stats
         [Header("General Statistics")]
@@ -43,7 +44,7 @@ namespace Mattordev.Utils.Stats
         public float orbitalPeriod;
         public float bodySpeed;
         public string closestbody;
-        private GameObject selectedBody;
+        public GameObject selectedBody;
 
         [Space]
         [Header("Text Objects")]
@@ -78,12 +79,6 @@ namespace Mattordev.Utils.Stats
             {
                 GetStats();
                 UpdateStats();
-                Debug.Log($"eccentricity: {CalculateEccentricity()}");
-                Debug.Log($"SPAV: {CalculateSpecificAngularMomentumVector()}");
-                Debug.Log($"SMA: {CalculateSemiMajorAxis()}");
-                Debug.Log($"SGP: {CalculateStandardGravitationalParameter()}");
-                Debug.Log($"SOE: {CalculateSpecificOrbitalEnergy()}");
-
             }
         }
 
@@ -103,7 +98,7 @@ namespace Mattordev.Utils.Stats
             selectedMassText.text = mass.ToString();
             selectedClosestBodyText.text = closestbody;
             // This will need to be fixed (see the xml summary of the function)
-            selectedOrbitalPeriodText.text = orbitalPeriod.ToString();
+            selectedOrbitalPeriodText.text = "WIP";
             selectedBodySpeedText.text = bodySpeed.ToString();
         }
 
@@ -261,42 +256,40 @@ namespace Mattordev.Utils.Stats
 
         #region Calculate Oribtal Parameters
 
-        // private float CalculateOrbitalPeriod()
-        // {
+        // The commented out code is the actual math that I should be using
+        // I just couldn't get it to work..
 
+        // private float CalculateEccentricity()
+        // {
+        //     selectedBody = GetSelectedBody();
+        //     Vector3 r = selectedBody.transform.position;
+        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+
+        //     Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
+        //     return e.magnitude;
         // }
 
-        private float CalculateEccentricity()
-        {
-            selectedBody = GetSelectedBody();
-            Vector3 r = selectedBody.transform.position;
-            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+        // private Vector3 CalculateSpecificAngularMomentumVector()
+        // {
+        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+        //     return Vector3.Cross(selectedBody.transform.position, velocity);
+        // }
 
-            Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
-            return e.magnitude;
-        }
+        // private float CalculateSemiMajorAxis()
+        // {
+        //     return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
+        // }
 
-        private Vector3 CalculateSpecificAngularMomentumVector()
-        {
-            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
-            return Vector3.Cross(selectedBody.transform.position, velocity);
-        }
+        // private float CalculateStandardGravitationalParameter()
+        // {
+        //     return universeParameters.gravitationalConstant * mass;
+        // }
 
-        private float CalculateSemiMajorAxis()
-        {
-            return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
-        }
-
-        private float CalculateStandardGravitationalParameter()
-        {
-            return universeParameters.gravitationalConstant * mass;
-        }
-
-        private float CalculateSpecificOrbitalEnergy()
-        {
-            float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
-            return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
-        }
+        // private float CalculateSpecificOrbitalEnergy()
+        // {
+        //     float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
+        //     return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
+        // }
 
 
         #endregion
