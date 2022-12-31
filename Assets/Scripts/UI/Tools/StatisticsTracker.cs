@@ -19,8 +19,9 @@ namespace Mattordev.Utils.Stats
 
         // Used for orbital period
         // Track the minimum and maximum distances between the two objects
-        float minDistance = float.MaxValue;
-        float maxDistance = 0;
+        public float minDistance = float.MaxValue;
+        public float maxDistance = 0;
+        public float periapsis, apoapsis;
 
         // General Stats
         [Header("General Statistics")]
@@ -59,7 +60,7 @@ namespace Mattordev.Utils.Stats
         public TMP_Text selectedOrbitalPeriodText;
         public TMP_Text selectedBodySpeedText;
 
-        public Dictionary<string, float> objectDistances = new Dictionary<string, float>();
+        Dictionary<string, float> objectDistances = new Dictionary<string, float>();
 
 
         // Start is called before the first frame update
@@ -77,8 +78,13 @@ namespace Mattordev.Utils.Stats
             {
                 GetStats();
                 UpdateStats();
-            }
+                Debug.Log($"eccentricity: {CalculateEccentricity()}");
+                Debug.Log($"SPAV: {CalculateSpecificAngularMomentumVector()}");
+                Debug.Log($"SMA: {CalculateSemiMajorAxis()}");
+                Debug.Log($"SGP: {CalculateStandardGravitationalParameter()}");
+                Debug.Log($"SOE: {CalculateSpecificOrbitalEnergy()}");
 
+            }
         }
 
         public void UpdateStats()
@@ -130,7 +136,7 @@ namespace Mattordev.Utils.Stats
             Rigidbody2D selectedRb = body.GetComponent<Rigidbody2D>();
             mass = selectedRb.mass;
             closestbody = GetClosestBody();
-            orbitalPeriod = OrbitalPeriod();
+            //orbitalPeriod = OrbitalPeriod();
             Attractor selectedAttractor = body.GetComponent<Attractor>();
             bodySpeed = selectedAttractor.rb.velocity.y;
             #endregion
@@ -186,7 +192,7 @@ namespace Mattordev.Utils.Stats
         }
 
         // Selected Body
-        private GameObject GetSelectedBody()
+        public GameObject GetSelectedBody()
         {
             CameraController cameraController = FindObjectOfType<CameraController>();
 
@@ -201,98 +207,6 @@ namespace Mattordev.Utils.Stats
                 return body;
             }
             return null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="mass1"></param>
-        /// <param name="mass2"></param>
-        /// <param name="distance"></param>
-        /// <param name="eccentricity"></param>
-        /// <returns></returns>
-        public float CalculateOrbitPeriod(float mass1, float mass2, float distance, float eccentricity)
-        {
-            // Calculate the semi-major axis of the elliptical orbit
-            float a = distance / (1 - eccentricity);
-
-            // Keplerian formula - T = 2 * pi * sqrt(a^3 / (G * (m1 + m2)
-            // Calculate the orbital period using the formula above
-            float T = 2 * Mathf.PI * Mathf.Sqrt((Mathf.Pow(a, 3)) / (universeParameters.gravitationalConstant * (mass1 + mass2)));
-
-            // Convert the orbital period to seconds
-            float orbitalPeriodInSeconds = T / 60;
-
-
-            return orbitalPeriodInSeconds;
-        }
-
-        /// <summary>
-        /// TODO:
-        /// Calculate all orbits at the start of the game - save them to a dictionary with a name and a value for the period
-        /// Set the UI Text to whichever is selected instead of calculating it every time a planet is clicked, every frame.
-        /// 
-        /// This will increase initial overhead, but be more performant in the longrun.
-        /// I also need to take into account that for more complex simulations, this wont work (Keplerian formula - T = 2 * pi * sqrt(a^3 / (G * (m1 + m2))))). As the orbital period formula I've chosen
-        /// is only made to be used in 2-body systems, not more than that. To solve for this, I can start using numerical integration or, solve using
-        /// this formula in pairs - This will still work, but will become innacurate over time.
-        /// 
-        /// As another note, I might need to make that dictionary a 4D dictionary to hold the name, period, apoapsis and periapsis.
-        /// </summary>
-        /// <returns>The orbital period in seconds</returns>
-        public float OrbitalPeriod()
-        {
-            selectedBody = GetSelectedBody();
-
-            // Iterate through all Attractors in the list
-            foreach (Attractor attractor in attractors)
-            {
-                // Skip the distance calculation and comparison if the current Attractor is the selected body
-                if (attractor.gameObject == selectedBody)
-                {
-                    continue;
-                }
-
-                // Calculate the distance between the selected body and the current Attractor
-                float distance = Vector3.Distance(selectedBody.transform.position, attractor.transform.position);
-
-                minDistance = Mathf.Min(minDistance, distance);
-                maxDistance = Mathf.Max(maxDistance, distance);
-
-                CalculateApoapsisPeriapsis();
-
-                Rigidbody2D m1Rb = selectedBody.GetComponent<Rigidbody2D>();
-                Rigidbody2D m2Rb = sun.GetComponent<Rigidbody2D>();
-
-                orbitalPeriod = CalculateOrbitPeriod(m1Rb.mass, m2Rb.mass, distance, CalculateEccentricity(minDistance, maxDistance));
-
-                return orbitalPeriod;
-            }
-            return 0;
-        }
-
-        /// <summary>
-        /// Calculates the eccentricity based on the apoapsis and periapsis
-        /// </summary>
-        /// <param name="periapsis"></param>
-        /// <param name="apoapsis"></param>
-        /// <returns></returns>
-        public float CalculateEccentricity(float periapsis, float apoapsis)
-        {
-            // e = (apoapsis - periapsis) / (apoapsis + periapsis)
-            // Calculate the eccentricity using the formula above
-            float eccentricity = (apoapsis - periapsis) / (apoapsis + periapsis);
-
-            return eccentricity;
-        }
-
-        public void CalculateApoapsisPeriapsis()
-        {
-            // The apoapsis is the maximum distance between the two objects
-            float apoapsis = maxDistance;
-
-            // The periapsis is the minimum distance between the two objects
-            float periapsis = minDistance;
         }
 
         private string GetClosestBody()
@@ -314,17 +228,6 @@ namespace Mattordev.Utils.Stats
 
                 // Calculate the distance between the selected body and the current Attractor
                 float distance = Vector3.Distance(selectedBody.transform.position, attractor.transform.position);
-
-                minDistance = Mathf.Min(minDistance, distance);
-                maxDistance = Mathf.Max(maxDistance, distance);
-                CalculateApoapsisPeriapsis();
-
-                // We set the orbital period here for ease
-
-                Rigidbody2D m1Rb = selectedBody.GetComponent<Rigidbody2D>();
-                Rigidbody2D m2Rb = sun.GetComponent<Rigidbody2D>();
-
-                orbitalPeriod = CalculateOrbitPeriod(m1Rb.velocity.y, m2Rb.velocity.y, distance, CalculateEccentricity(minDistance, maxDistance));
 
                 // Add the Attractor's name and distance to the dictionary
                 distances.Add(attractor.name, distance);
@@ -355,6 +258,48 @@ namespace Mattordev.Utils.Stats
             // Return the name and distance of the closest Attractor as a string
             return $"{closestObjectName} ({closestDistance:F2})";
         }
+
+        #region Calculate Oribtal Parameters
+
+        // private float CalculateOrbitalPeriod()
+        // {
+
+        // }
+
+        private float CalculateEccentricity()
+        {
+            selectedBody = GetSelectedBody();
+            Vector3 r = selectedBody.transform.position;
+            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+
+            Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
+            return e.magnitude;
+        }
+
+        private Vector3 CalculateSpecificAngularMomentumVector()
+        {
+            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+            return Vector3.Cross(selectedBody.transform.position, velocity);
+        }
+
+        private float CalculateSemiMajorAxis()
+        {
+            return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
+        }
+
+        private float CalculateStandardGravitationalParameter()
+        {
+            return universeParameters.gravitationalConstant * mass;
+        }
+
+        private float CalculateSpecificOrbitalEnergy()
+        {
+            float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
+            return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
+        }
+
+
+        #endregion
 
 
         public void ResetSelectedToDefault()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mattordev.Utils.Stats;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -39,6 +40,7 @@ namespace Mattordev.Utils
         // Other Variables
         [SerializeField] private AddObject addObject;
         [SerializeField] private MoveObject moveObject;
+        [SerializeField] private StatisticsTracker statisticsTracker;
 
         // Start is called before the first frame update
         void Start()
@@ -107,6 +109,8 @@ namespace Mattordev.Utils
             if (Input.GetButtonDown("Fire1") && !addObject.placing)
             {
                 MoveToClickedTarget(hit.transform);
+                // string selectedBodyName = statisticsTracker.GetSelectedBody().name;
+                // (float orbitalPeriod, float apoapsis, float periapsis) = statisticsTracker.orbitalParameters[selectedBodyName];
             }
         }
 
