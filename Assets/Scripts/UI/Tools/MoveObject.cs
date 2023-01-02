@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Mattordev.Universe;
 using Mattordev.Utils.Stats;
+using Mattordev.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -48,6 +49,7 @@ namespace Mattordev.Utils
         public void StartObjectMove()
         {
             moving = true;
+            StatusController.StatusMessage = "Pick an object to move...";
         }
 
         void MoveObjectToMouse()
@@ -57,14 +59,14 @@ namespace Mattordev.Utils
             {
                 selectedObject = hit.transform.gameObject;
 
-                Debug.Log(selectedObject);
-
+                StatusController.StatusMessage = $"Moving {hit.transform.name}";
             }
 
             // Player clicks to drop the object
             if (Input.GetMouseButtonDown(1))
             {
                 // set moving to false to drop the planet at the current mouse pos
+                StatusController.StatusMessage = $"No longer moving body...";
                 moving = false;
                 selectedObject = null;
             }

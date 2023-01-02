@@ -79,6 +79,12 @@ namespace Mattordev.Utils.Stats
             {
                 GetStats();
                 UpdateStats();
+
+                // Debug.Log($"E: {CalculateEccentricity()}");
+                // Debug.Log($"SAMV: {CalculateSpecificAngularMomentumVector()}");
+                // Debug.Log($"SMA: {CalculateSemiMajorAxis()}");
+                // Debug.Log($"SGP : {CalculateStandardGravitationalParameter()}");
+                // Debug.Log($"SOE : {CalculateSpecificOrbitalEnergy()}");
             }
         }
 
@@ -117,23 +123,23 @@ namespace Mattordev.Utils.Stats
             #endregion
 
             #region Selected
-            GameObject body = GetSelectedBody();
+            selectedBody = GetSelectedBody();
             // If there's nothing selected
-            if (!body)
+            if (!selectedBody)
             {
                 mass = 0;
             }
 
-            if (body == this.gameObject)
+            if (selectedBody == this.gameObject)
             {
                 return;
             }
-            Rigidbody2D selectedRb = body.GetComponent<Rigidbody2D>();
+            Rigidbody2D selectedRb = selectedBody.GetComponent<Rigidbody2D>();
             mass = selectedRb.mass;
             closestbody = GetClosestBody();
             //orbitalPeriod = OrbitalPeriod();
-            Attractor selectedAttractor = body.GetComponent<Attractor>();
-            bodySpeed = selectedAttractor.rb.velocity.y;
+            Attractor selectedAttractor = selectedBody.GetComponent<Attractor>();
+            bodySpeed = selectedAttractor.rb.velocity.magnitude;
             #endregion
         }
 
@@ -259,37 +265,36 @@ namespace Mattordev.Utils.Stats
         // The commented out code is the actual math that I should be using
         // I just couldn't get it to work..
 
-        // private float CalculateEccentricity()
-        // {
-        //     selectedBody = GetSelectedBody();
-        //     Vector3 r = selectedBody.transform.position;
-        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+        private float CalculateEccentricity()
+        {
+            Vector3 r = selectedBody.transform.position;
+            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
 
-        //     Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
-        //     return e.magnitude;
-        // }
+            Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
+            return e.magnitude;
+        }
 
-        // private Vector3 CalculateSpecificAngularMomentumVector()
-        // {
-        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
-        //     return Vector3.Cross(selectedBody.transform.position, velocity);
-        // }
+        private Vector3 CalculateSpecificAngularMomentumVector()
+        {
+            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+            return Vector3.Cross(selectedBody.transform.position, velocity);
+        }
 
-        // private float CalculateSemiMajorAxis()
-        // {
-        //     return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
-        // }
+        private float CalculateSemiMajorAxis()
+        {
+            return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
+        }
 
-        // private float CalculateStandardGravitationalParameter()
-        // {
-        //     return universeParameters.gravitationalConstant * mass;
-        // }
+        private float CalculateStandardGravitationalParameter()
+        {
+            return universeParameters.gravitationalConstant * mass;
+        }
 
-        // private float CalculateSpecificOrbitalEnergy()
-        // {
-        //     float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
-        //     return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
-        // }
+        private float CalculateSpecificOrbitalEnergy()
+        {
+            float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
+            return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
+        }
 
 
         #endregion

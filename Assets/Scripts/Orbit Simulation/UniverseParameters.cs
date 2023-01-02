@@ -20,6 +20,13 @@ namespace Mattordev.Universe
         private void Awake()
         {
             physicsTimeStep = Time.fixedDeltaTime;
+            // gravitationalConstant = CalculateG();
+        }
+
+
+        private float CalculateG()
+        {
+            return 6.7f * Mathf.Pow(10, -11);
         }
     }
 }

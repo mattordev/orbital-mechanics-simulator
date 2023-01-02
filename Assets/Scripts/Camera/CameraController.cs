@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Utils.Stats;
+using Mattordev.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -58,7 +59,6 @@ namespace Mattordev.Utils
             // Focusing
             if (!moveObject.moving)
             {
-
                 UpdateSmoothDampPos();
                 FocusOnObject();
             }
@@ -109,6 +109,10 @@ namespace Mattordev.Utils
             if (Input.GetButtonDown("Fire1") && !addObject.placing)
             {
                 MoveToClickedTarget(hit.transform);
+                if (hit.transform != null)
+                {
+                    StatusController.StatusMessage = $"Focusing on {hit.transform.name}";
+                }
                 // string selectedBodyName = statisticsTracker.GetSelectedBody().name;
                 // (float orbitalPeriod, float apoapsis, float periapsis) = statisticsTracker.orbitalParameters[selectedBodyName];
             }
@@ -130,6 +134,7 @@ namespace Mattordev.Utils
         {
             if (target == null)
             {
+                StatusController.StatusMessage = "Simulating...";
                 transform.parent = null;
                 currentlyFocusedOn = null;
                 focusing = false;
@@ -137,6 +142,8 @@ namespace Mattordev.Utils
             }
             // Tell the rest of the script that a planet has been focused
             focusing = true;
+
+
             // Set the inspector variable.
             currentlyFocusedOn = target.gameObject;
             //transform.position = new Vector3(target.position.x, target.position.y, -10);

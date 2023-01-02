@@ -56,6 +56,8 @@ namespace Mattordev.Utils
                     // set placing to false to drop the planet at the current mouse pos
                     placing = false;
 
+                    StatusController.StatusMessage = "Type in an initial Velocity (e.g 500)...";
+
                     // Disable simulation untill its speed has been set
                     Rigidbody2D rb2D = selectedObject.GetComponent<Rigidbody2D>();
                     rb2D.simulated = false;
@@ -65,6 +67,8 @@ namespace Mattordev.Utils
                 orbitDisplay.enabled = true;
                 orbitDisplay.hideOrbitPathsOnPlay = false;
                 orbitDisplay.useThickLines = true;
+
+
 
                 // enable UI to enter speed ?? enable drag to scale speed?
                 velocityUI.SetActive(true);
@@ -100,6 +104,9 @@ namespace Mattordev.Utils
             // Set public variable to the same as instantaited one.
             selectedObject = instantiatedGO;
 
+
+            StatusController.StatusMessage = "Type in an initial Velocity (e.g 500)...";
+
             Rigidbody2D rb2D = selectedObject.GetComponent<Rigidbody2D>();
             rb2D.simulated = false;
 
@@ -108,12 +115,15 @@ namespace Mattordev.Utils
         }
 
         // Currently doesn't set velocity correctly.
+        // 02.01.23 - I finally figured it out! it's because the planet is *techinically* being spawned in with
+        // a velocity of zero, adding the speed to the "initial velocty" after instantiating it would never work.
         public void SetInitialVelocity()
         {
             inputField = velocityUI.GetComponentInChildren<TMP_InputField>();
             Attractor currentAttractor = selectedObject.GetComponent<Attractor>();
             currentAttractor.initialVelocity.y = int.Parse(inputField.text);
             currentAttractor.currentVelocity = currentAttractor.initialVelocity;
+
 
 
             // Unpause sim 
@@ -145,6 +155,7 @@ namespace Mattordev.Utils
 
         GameObject InstantiateObject(int prefabNumber)
         {
+
             return Instantiate(objectPrefabs[prefabNumber], Vector3.zero, Quaternion.identity);
         }
 

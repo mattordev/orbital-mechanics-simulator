@@ -360,6 +360,7 @@ GameObject:
   - component: {fileID: 8634867235524809968}
   - component: {fileID: 7311124623361580702}
   - component: {fileID: 4228687818213947547}
+  - component: {fileID: 1697384366434834188}
   m_Layer: 5
   m_Name: StatusCanvas
   m_TagString: Untagged
@@ -449,3 +450,15 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1697384366434834188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9018079508824394569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e352b6fed3736b649ae52584218a5f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
