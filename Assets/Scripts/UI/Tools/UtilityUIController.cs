@@ -19,6 +19,7 @@ namespace Mattordev.UI
         [Header("Canvas Elements")]
         public GameObject utilWindow;
         public GameObject additionWindow;
+        public GameObject editWindow;
 
         [Header("Scripts")]
         public StatisticsTracker statisticsTracker;
@@ -34,14 +35,13 @@ namespace Mattordev.UI
             utilCanvas = GetComponent<Canvas>();
             utilCanvas.enabled = false;
 
+
             // Make sure all of the scripts are in the correct state, aka off.
             statisticsTracker.enabled = false;
             addObject.enabled = false;
             deleteObject.enabled = false;
             moveObject.enabled = false;
             statusController.enabled = !statusController.enabled;
-
-            // StatusController.StatusMessage = "0123456789012345678901234567890123456789";
         }
 
         // Update is called once per frame
@@ -72,13 +72,14 @@ namespace Mattordev.UI
             addObject.enabled = !addObject.enabled;
             deleteObject.enabled = !deleteObject.enabled;
             moveObject.enabled = !moveObject.enabled;
-            statusController.enabled = !statusController.enabled;
+            // statusController.enabled = !statusController.enabled;
         }
 
         private void ResetUI()
         {
             utilWindow.SetActive(true);
             additionWindow.SetActive(false);
+            editWindow.SetActive(false);
         }
     }
 }

@@ -28,6 +28,8 @@ namespace Mattordev.UI
         public Button button;
         public TableGenerator tableGenerator;
 
+        Rigidbody2D rb2D;
+
         private void Start()
         {
             tableGenerator = FindObjectOfType<TableGenerator>();
@@ -42,16 +44,21 @@ namespace Mattordev.UI
         public void SetInfo(Attractor attractor)
         {
             this.attractor = attractor;
+            rb2D = attractor.GetComponent<Rigidbody2D>();
 
             SpriteRenderer spriteRenderer = attractor.GetComponent<SpriteRenderer>();
             image.sprite = spriteRenderer.sprite;
 
-            Rigidbody2D rb2D = attractor.GetComponent<Rigidbody2D>();
+
 
             nameText.text = attractor.gameObject.name;
             massText.text = rb2D.mass.ToString();
-            // Need to get these to update dynamically as the speed changes
-            speedText.text = rb2D.velocity.y.ToString();
+        }
+
+        private void Update()
+        {
+            // Update the speed val
+            speedText.text = rb2D.velocity.magnitude.ToString();
         }
     }
 }

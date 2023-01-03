@@ -265,36 +265,36 @@ namespace Mattordev.Utils.Stats
         // The commented out code is the actual math that I should be using
         // I just couldn't get it to work..
 
-        private float CalculateEccentricity()
-        {
-            Vector3 r = selectedBody.transform.position;
-            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+        // private float CalculateEccentricity()
+        // {
+        //     Vector3 r = selectedBody.transform.position;
+        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
 
-            Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
-            return e.magnitude;
-        }
+        //     Vector3 e = (Vector3.Cross(velocity, CalculateSpecificAngularMomentumVector()) / CalculateSpecificOrbitalEnergy() - r.normalized);
+        //     return e.magnitude;
+        // }
 
-        private Vector3 CalculateSpecificAngularMomentumVector()
-        {
-            Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
-            return Vector3.Cross(selectedBody.transform.position, velocity);
-        }
+        // private Vector3 CalculateSpecificAngularMomentumVector()
+        // {
+        //     Vector3 velocity = selectedBody.GetComponent<Rigidbody2D>().velocity;
+        //     return Vector3.Cross(selectedBody.transform.position, velocity);
+        // }
 
-        private float CalculateSemiMajorAxis()
-        {
-            return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
-        }
+        // private float CalculateSemiMajorAxis()
+        // {
+        //     return CalculateStandardGravitationalParameter() / Mathf.Pow(CalculateSpecificOrbitalEnergy(), 2);
+        // }
 
-        private float CalculateStandardGravitationalParameter()
-        {
-            return universeParameters.gravitationalConstant * mass;
-        }
+        // private float CalculateStandardGravitationalParameter()
+        // {
+        //     return universeParameters.gravitationalConstant * mass;
+        // }
 
-        private float CalculateSpecificOrbitalEnergy()
-        {
-            float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
-            return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
-        }
+        // private float CalculateSpecificOrbitalEnergy()
+        // {
+        //     float radius = selectedBody.GetComponent<CircleCollider2D>().radius;
+        //     return (bodySpeed * bodySpeed) / 2 - (CalculateStandardGravitationalParameter() / radius);
+        // }
 
 
         #endregion
