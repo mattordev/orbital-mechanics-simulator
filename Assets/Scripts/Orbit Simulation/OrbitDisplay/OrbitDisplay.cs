@@ -23,6 +23,7 @@ namespace Mattordev
         public bool useThickLines; // Defines whether the lines will be thicker when displayed
 
         public bool hideOrbitPathsOnPlay;
+        public bool updateOrbitsLive;
 
         public UniverseParameters universeParameters;
         public Color pathColor;
@@ -43,6 +44,42 @@ namespace Mattordev
             if (!Application.isPlaying)
             {
                 DrawOrbits();
+            }
+
+            if (updateOrbitsLive)
+            {
+                numberOfSteps = 100;
+                DrawOrbits();
+            }
+        }
+
+        public void ToggleLiveOrbits(bool state)
+        {
+            // make it remember the old orbits
+            updateOrbitsLive = state;
+        }
+
+        private void OnEnable()
+        {
+            // Make an array of all the attractors in the scene
+            Attractor[] bodies = FindObjectsOfType<Attractor>();
+
+            foreach (Attractor attractor in bodies)
+            {
+                var lr = attractor.gameObject.GetComponent<LineRenderer>();
+                lr.enabled = true;
+            }
+        }
+
+        private void OnDisable()
+        {
+            // Make an array of all the attractors in the scene
+            Attractor[] bodies = FindObjectsOfType<Attractor>();
+
+            foreach (Attractor attractor in bodies)
+            {
+                var lr = attractor.gameObject.GetComponent<LineRenderer>();
+                lr.enabled = false;
             }
         }
 
