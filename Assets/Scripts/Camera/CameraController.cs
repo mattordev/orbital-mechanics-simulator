@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mattordev.Utils.Stats;
+using Mattordev.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -34,7 +36,13 @@ namespace Mattordev.Utils
         public GameObject currentlyFocusedOn;
         private Vector2 smoothedCameraPos;
         private Vector2 posVelocity;
-        private bool focusing;
+        public bool focusing;
+
+        // Other Variables
+        [SerializeField] private AddObject addObject;
+        [SerializeField] private MoveObject moveObject;
+        [SerializeField] private EditObject editObject;
+        [SerializeField] private StatisticsTracker statisticsTracker;
 
         // Start is called before the first frame update
         void Start()
@@ -50,8 +58,21 @@ namespace Mattordev.Utils
             ZoomScale();
 
             // Focusing
-            UpdateSmoothDampPos();
-            FocusOnObject();
+            // make sure that we're not moving another object
+            if (moveObject.moving)
+            {
+                return;
+            }
+
+            if (focusing)
+            {
+                UpdateSmoothDampPos();
+            }
+
+            if (Input.GetButtonDown("Fire1"))
+            {
+                FocusOnObject();
+            }
         }
 
         /// <summary>
@@ -94,26 +115,48 @@ namespace Mattordev.Utils
 
         private void FocusOnObject()
         {
-            Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-            if (Input.GetButtonDown("Fire1"))
+            if (addObject.placing)
             {
-                MoveToClickedTarget(hit.transform);
+                return;
             }
-        }
 
-        private void MoveToClickedTarget(Transform target)
-        {
-            if (target == null)
+            RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
+
+            if (hit.transform == null && !editObject.editingObject)
             {
+                StatusController.StatusMessage = "Simulating...";
                 transform.parent = null;
                 currentlyFocusedOn = null;
                 focusing = false;
                 return;
             }
+
+            if (hit.transform != null)
+            {
+                MoveToClickedTarget(hit.transform);
+                StatusController.StatusMessage = $"Focusing on {hit.transform.name}";
+            }
+        }
+
+        public GameObject GetClickedItem()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
+
+            if (hit.collider == null)
+            {
+                Debug.LogError("Didn't hit a collider!");
+                return null;
+            }
+            return hit.transform.gameObject;
+        }
+
+        public void MoveToClickedTarget(Transform target)
+        {
+
             // Tell the rest of the script that a planet has been focused
             focusing = true;
+
+
             // Set the inspector variable.
             currentlyFocusedOn = target.gameObject;
             //transform.position = new Vector3(target.position.x, target.position.y, -10);
@@ -123,15 +166,15 @@ namespace Mattordev.Utils
 
         void UpdateSmoothDampPos()
         {
-            // If we're not focusing, return out of the function.
-            if (!focusing)
-            {
-                return;
-            }
             // Create the smooth camera pos based on the cameras current location and the focused target.
             smoothedCameraPos = Vector2.SmoothDamp(transform.position, currentlyFocusedOn.transform.position, ref posVelocity, amountOfSmoothing);
             // Move the camera to the new target, whilst keeping the z value intact
             transform.position = new Vector3(smoothedCameraPos.x, smoothedCameraPos.y, -10);
+        }
+
+        public Vector2 GetMousePos()
+        {
+            return mainCamera.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }

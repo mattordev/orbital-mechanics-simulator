@@ -11,7 +11,7 @@ namespace Mattordev.Universe
 {
     public class BodySimulation : MonoBehaviour
     {
-        Attractor[] bodies;
+        public Attractor[] bodies;
         UniverseParameters universeParameters;
 
         private void Awake()
@@ -28,6 +28,12 @@ namespace Mattordev.Universe
                 // Update the position of the planets based on the physics timestep.
                 bodies[i].UpdatePosition(universeParameters.physicsTimeStep);
             }
+        }
+
+        public void GetBodies()
+        {
+            Attractor[] newBodies = FindObjectsOfType<Attractor>();
+            bodies = newBodies;
         }
     }
 }

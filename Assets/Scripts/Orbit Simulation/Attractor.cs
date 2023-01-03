@@ -14,8 +14,7 @@ namespace Mattordev.Universe
         public static List<Attractor> attractors;
         public Rigidbody2D rb;
         public Vector2 initialVelocity;
-        private Vector2 currentVelocity;
-        public float _currentVelocity;
+        public Vector2 currentVelocity;
 
         UniverseParameters universeParameters;
 
@@ -34,8 +33,6 @@ namespace Mattordev.Universe
                     Attract(attractor);
                 }
             }
-
-            _currentVelocity = rb.velocity.y;
         }
 
         private void OnEnable()
@@ -74,6 +71,12 @@ namespace Mattordev.Universe
         public void UpdatePosition(float timeStep)
         {
             rb.position += currentVelocity * timeStep;
+        }
+
+        public void UpdateAttractors()
+        {
+            attractors = new List<Attractor>();
+            attractors.Add(this);
         }
     }
 }
