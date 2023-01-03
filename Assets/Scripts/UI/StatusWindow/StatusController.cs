@@ -12,10 +12,10 @@ namespace Mattordev.UI
 {
     public class StatusController : MonoBehaviour
     {
-        private static string statusMessage;
+        private static string _statusMessage;
         public static string StatusMessage
         {
-            get { return statusMessage; }
+            get { return _statusMessage; }
             set
             {
                 // Check the message len
@@ -24,12 +24,12 @@ namespace Mattordev.UI
                     // Warn that the status message might be too long
                     Debug.LogWarning("Status message was too long! It might not fit in the window!");
                     // Set the status variable
-                    statusMessage = value;
+                    _statusMessage = value;
                 }
                 else
                 {
                     // Set the status variable
-                    statusMessage = value;
+                    _statusMessage = value;
                 }
             }
         }

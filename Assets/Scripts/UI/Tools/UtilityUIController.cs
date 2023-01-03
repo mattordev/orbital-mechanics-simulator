@@ -26,6 +26,7 @@ namespace Mattordev.UI
         public AddObject addObject;
         public DeleteObject deleteObject;
         public MoveObject moveObject;
+        public EditObject editObject;
         public StatusController statusController;
 
         // Start is called before the first frame update
@@ -41,7 +42,7 @@ namespace Mattordev.UI
             addObject.enabled = false;
             deleteObject.enabled = false;
             moveObject.enabled = false;
-            statusController.enabled = !statusController.enabled;
+            // statusController.enabled = !statusController.enabled;
         }
 
         // Update is called once per frame
@@ -72,6 +73,8 @@ namespace Mattordev.UI
             addObject.enabled = !addObject.enabled;
             deleteObject.enabled = !deleteObject.enabled;
             moveObject.enabled = !moveObject.enabled;
+
+
             // statusController.enabled = !statusController.enabled;
         }
 
