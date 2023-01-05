@@ -1,18 +1,37 @@
-### Blank Unity Project ### 
+### Orbital Mechanics Simulator
 
-This repository has been pre-configured with a .gitignore and .gitattributes file specific to Unity projects using git-lfs. 
+This project is supposed to simulate orbits using real world orbital mechanics equations and formulas in (somewhat) simple ways
 
-This project was created for Unity [2021.3.4f1](https://unity3d.com/get-unity/download/archive)
+# Description
 
-The project has been created with a barebones folder structure.  The settings have been optimized for best 3D quality without adding any additional packages to the project.
-For 2D projects, go to Edit -> Project Settings -> Editor and set the "Default Behaviour Mode" to 2D.  Do this at the start so that imported assets are optimized automatically.
+This project serves as a simple (yet accurate.. to a degree) orbital mechanics simulator, which I developed as part of my GAM340 module during my time at Falmouth University.
 
-To use this repo select it from the remplate list when making a new repo.
+Whilst it's not finished, it features many of the original features that I wanted when I set out my Statement of Intent when the project began. So, to that extent please keep in mind that the project is unfinished, and may never get finished regardless of my own personal plans for it (which are to keep working on it)
 
-Note:  Do not leave empty folders in your Unity project.  Empty folders do not get added to version control, but the meta files they create do.  This can lead to issues with keeping your project up to date.
+Features:
 
-Please make sure you place all of your Terrain in a folder called "Terrain" or "Terrains". Failing to do so will result in corupted projects.
+Simulated Newtonian Gravity, which allows for complex orbits.
+An in-depth statistics window that shows the state of the simulation at any point in time
+Simulation tools for editing, adding, moving, and deleting the various celestial bodies and objects in the simulation.
+Orbit previews and a "live update" mode that will attempt to calculate the orbits as the planets move (WIP)
+Known Bugs/Issues:
 
-For full details on this project's settings, please read the Changelog.md
- 
-Do you have any suggestions for improvements? Please submit a pull request!
+- "Live orbit" mode gives erroneous results, that don't match the originally predicted orbit.
+- When selecting a planet using the edit tool, sometimes you have to click an object twice for it to actually be selected
+- After placing a body using the "add" tool, setting the velocity doesn't work
+- Settings menu is blank
+
+For a more in-depth look at the development, find the Trello board here: https://trello.com/b/XngKKkMS/orbital-mechanics-simulator
+
+For planned features, it's best to look the Trello as that will be the most up-to-date place.
+
+Thanks for playing! Please feel free to give me some feedback or if you find a bug I'd appreciate you leaving a comment letting me know how to reproduce it :)
+
+# Sources and Credits
+
+- Sebastians Lagues "Coding Adventure: Solar System": https://www.youtube.com/watch?v=7axImc1sxa0&
+- Brackeys, multiple uses: https://www.youtube.com/@Brackeys
+
+# Licence
+
+Please see the Licence.md file
