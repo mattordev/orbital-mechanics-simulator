@@ -32,11 +32,11 @@ namespace Mattordev.Utils
         public Slider speedSlider;
         public FlexibleColorPicker colorPicker;
 
-        private void Start()
-        {
-
-        }
-
+        /// <summary>
+        /// Fixed update, runs at a locked speed
+        /// 
+        /// Here we call the function to get the object that's being edited, and then call the functions to set the color and the sliders
+        /// </summary>
         private void FixedUpdate()
         {
             GetObjectToEdit();
@@ -53,12 +53,19 @@ namespace Mattordev.Utils
             }
         }
 
-        public void EditObjectParameters(GameObject objectToEdit)
+        /// <summary>
+        /// Turns on the edit window
+        /// </summary>
+        /// <param name="objectToEdit"></param>
+        public void EnableEditWindow()
         {
             // Turn on the edit window
             editWindow.SetActive(true);
         }
 
+        /// <summary>
+        /// Gets the object to edit using  ray cast and then sets the sliders to the correct value (objects current value)
+        /// </summary>
         public void GetObjectToEdit()
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
@@ -78,7 +85,7 @@ namespace Mattordev.Utils
                 speedSlider.value += rb2D.velocity.magnitude;
 
 
-
+                // Send status message
                 StatusController.StatusMessage = $"Selected {hit.transform.name} for editing...";
             }
         }
@@ -103,12 +110,19 @@ namespace Mattordev.Utils
             // }
         }
 
+        /// <summary>
+        /// Sets the color based on the color pickers color.
+        /// </summary>
         public void SetColor()
         {
             // set the color from the color picker
             spriteRenderer.color = colorPicker.color;
         }
 
+        /// <summary>
+        /// Toggles object editing bool
+        /// </summary>
+        /// <param name="editing"></param>
         public void ToggleEditing(bool editing)
         {
             editingObject = editing;

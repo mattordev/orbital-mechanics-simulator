@@ -15,6 +15,7 @@ namespace Mattordev.UI
     {
         public KeyCode keyToActivate;
         public Canvas utilCanvas;
+        public Canvas statusWindow;
 
         [Header("Canvas Elements")]
         public GameObject utilWindow;
@@ -27,7 +28,6 @@ namespace Mattordev.UI
         public DeleteObject deleteObject;
         public MoveObject moveObject;
         public EditObject editObject;
-        public StatusController statusController;
 
         // Start is called before the first frame update
         void Start()
@@ -35,6 +35,7 @@ namespace Mattordev.UI
             // Get ref to canvas and disable it at game start
             utilCanvas = GetComponent<Canvas>();
             utilCanvas.enabled = false;
+            statusWindow.enabled = false;
 
 
             // Make sure all of the scripts are in the correct state, aka off.
@@ -42,7 +43,6 @@ namespace Mattordev.UI
             addObject.enabled = false;
             deleteObject.enabled = false;
             moveObject.enabled = false;
-            // statusController.enabled = !statusController.enabled;
         }
 
         // Update is called once per frame
@@ -67,6 +67,7 @@ namespace Mattordev.UI
         void Toggle()
         {
             utilCanvas.enabled = !utilCanvas.enabled;
+            statusWindow.enabled = !statusWindow.enabled;
 
             // Toggle Scripts
             statisticsTracker.enabled = !statisticsTracker.enabled;

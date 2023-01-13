@@ -9,6 +9,9 @@ using UnityEngine;
 /// </author>
 namespace Mattordev.Universe
 {
+    /// <summary>
+    /// Simulates gravity on the list of bodies that are in the scene using newtonian physics
+    /// </summary>
     public class BodySimulation : MonoBehaviour
     {
         public Attractor[] bodies;

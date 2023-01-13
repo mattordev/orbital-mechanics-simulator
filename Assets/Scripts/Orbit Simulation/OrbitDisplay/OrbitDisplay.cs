@@ -22,8 +22,8 @@ namespace Mattordev
         public float width = 100f; // The width of the line displayed
         public bool useThickLines; // Defines whether the lines will be thicker when displayed
 
-        public bool hideOrbitPathsOnPlay;
-        public bool updateOrbitsLive;
+        public bool hideOrbitPathsOnPlay; // Defines whether the orbit paths will be shown when the game plays
+        public bool updateOrbitsLive; // Will the oribits upate live? WIP
 
         public UniverseParameters universeParameters;
         public Color pathColor;
