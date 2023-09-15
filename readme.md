@@ -10,10 +10,12 @@ Whilst it's not finished, it features many of the original features that I wante
 
 Features:
 
-Simulated Newtonian Gravity, which allows for complex orbits.
-An in-depth statistics window that shows the state of the simulation at any point in time
-Simulation tools for editing, adding, moving, and deleting the various celestial bodies and objects in the simulation.
-Orbit previews and a "live update" mode that will attempt to calculate the orbits as the planets move (WIP)
+- Simulated Newtonian Gravity, which allows for complex orbits.
+- An in-depth statistics window that shows the state of the simulation at any point in time
+- Simulation tools for editing, adding, moving, and deleting the various celestial bodies and objects in the simulation.
+- Orbit previews and a "live update" mode that will attempt to calculate the orbits as the planets move (WIP)
+
+
 Known Bugs/Issues:
 
 - "Live orbit" mode gives erroneous results, that don't match the originally predicted orbit.
