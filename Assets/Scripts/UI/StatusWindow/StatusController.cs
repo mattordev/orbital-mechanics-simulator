@@ -10,64 +10,81 @@ using TMPro;
 /// </author>
 namespace Mattordev.UI
 {
+    /// <summary>
+    /// A class to control the status text and handle updating the UI. This tells the user what is going on in the simulation. 
+    /// </summary>
     public class StatusController : MonoBehaviour
     {
         private static string _statusMessage;
+        public const int MaxStatusMessageLen = 50;
         public static string StatusMessage
         {
             get { return _statusMessage; }
             set
             {
-                // Check the message len
-                if (value.Length > 50)
+                if (value == null)
                 {
-                    // Warn that the status message might be too long
-                    Debug.LogWarning("Status message was too long! It might not fit in the window!");
-                    // Set the status variable
-                    _statusMessage = value;
+                    Debug.LogWarning("Status message was null!");
+                    return;
                 }
-                else
+
+                if (value.Length > MaxStatusMessageLen)
                 {
-                    // Set the status variable
-                    _statusMessage = value;
+                    Debug.LogWarning("Status message was too long! It might not fit in the window.");
+                    // Trims the string between 0 chars and the max length.
+                    value = value.Substring(0, MaxStatusMessageLen);
                 }
+
+                _statusMessage = value;
             }
         }
 
-        public TMP_Text TextObject;
+        public TMP_Text textObject;
 
+        /// <summary>
+        /// Start method clears the status message and sets it back to its default message. 
+        /// </summary>
         private void Start()
         {
-            Clear();
+            ClearStatusMessage();
             StatusMessage = "Simulating...";
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Sets the text on the UI so it matches the status message
+        /// </summary>
         void Update()
         {
-            TextObject.text = StatusMessage;
+            textObject.text = StatusMessage;
         }
 
-        public void Clear()
+        /// <summary>
+        /// Clears the status message and logs it to the console.
+        /// </summary>
+        public void ClearStatusMessage()
         {
             Debug.Log("Clearing the Status Message");
-            TextObject.text = string.Empty;
+            textObject.text = string.Empty;
         }
 
-        public void Clear(int timeToClear)
+        /// <summary>
+        /// Clears the console after a set time. Implements a coroutine and calls the ClearStatusMessage function.
+        /// </summary>
+        /// <param name="timeToClear">The time to wait before clearing(in seconds).</param>
+        public void StartDelayedClear(int timeToClear)
         {
             StartCoroutine(WaitForSeconds(timeToClear));
         }
 
-        public void SendStatusMessage(string message)
-        {
-            StatusMessage = message.ToString();
-        }
-
+        /// <summary>
+        /// Coroutine that waits before clearing the message
+        /// </summary>
+        /// <param name="timeToWait">The time to wait before clearing(in seconds).</param>
+        /// <returns></returns>
         IEnumerator WaitForSeconds(int timeToWait)
         {
             yield return new WaitForSeconds(timeToWait);
-            Clear();
+            ClearStatusMessage();
         }
     }
 }
