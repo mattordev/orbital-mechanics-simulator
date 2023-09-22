@@ -12,24 +12,33 @@ using UnityEngine.UI;
 /// </author>
 namespace Mattordev.UI
 {
+    /// <summary>
+    /// A class to hold some basic information for the table entries, populates them when called for by passing in an attractor.
+    /// 
+    /// also handles the updating of each entires speed value - this is fine for a smaller number of bodies but might become unperformant when there's
+    /// lots of bodies in a scene.
+    /// </summary>
     public class ItemInfoHolder : MonoBehaviour
     {
         [Header("Text Objects")]
-        public TMP_Text nameText;
-        public TMP_Text massText;
-        public TMP_Text speedText;
+        public TMP_Text nameText;   // Name of the body
+        public TMP_Text massText;   // Mass of the body
+        public TMP_Text speedText;  // Speed of the body
 
         [Header("Image")]
-        public Image image;
+        public Image image; // Image used to display the body
 
         // Needed for focusing
         [Header("Other")]
-        public Attractor attractor;
-        public Button button;
-        public TableGenerator tableGenerator;
+        public Attractor attractor; // The attractor focused on
+        public Button button;  // Button used for clicking on the table to focus on the body 
+        public TableGenerator tableGenerator; // The table generator script
 
-        Rigidbody2D rb2D;
+        Rigidbody2D rb2D; // Ref to the planets rigidbody, used for accessing the mass.
 
+        /// <summary>
+        /// Start finds the ref to the table gen and adds a listener to the button to call the focus func.
+        /// </summary>
         private void Start()
         {
             tableGenerator = FindObjectOfType<TableGenerator>();
@@ -38,7 +47,7 @@ namespace Mattordev.UI
 
 
         /// <summary>
-        /// Populates the item fields with the correct parameters. 
+        /// Populates the item fields with the correct parameters.
         /// </summary>
         /// <param name="attractor"> Attractor object, all other variables are gotten from this</param>
         public void SetInfo(Attractor attractor)
@@ -55,6 +64,9 @@ namespace Mattordev.UI
             massText.text = rb2D.mass.ToString();
         }
 
+        /// <summary>
+        /// Continuosly update the speed text based on the RBs vel.magnitude
+        /// </summary>
         private void Update()
         {
             // Update the speed val
