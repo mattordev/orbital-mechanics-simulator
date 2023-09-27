@@ -18,20 +18,19 @@ namespace Mattordev.UI
     }
 
     /// <summary>
-    /// Populates the table properly based on how many bodies there are in the scene.
+    /// Populates the stats table based on how many bodies there are in the scene.
     /// </summary>
     public class TableGenerator : MonoBehaviour
     {
         public List<GameObject> tableItems; // The items in the table
         public List<Attractor> attractors; // The list of bodies in the scene
-        // public List<TableItem> tableItems
         public GameObject TableItemPrefab; // The UI prefab to instantiate
         public GameObject content; // Scroll view content
 
         public bool hasTableBeenSetup; // Check to say whether the table has been setup or not
 
-        Camera mainCam;
-        CameraController cameraController;
+        Camera mainCam; // the main camera in the scene
+        CameraController cameraController; // Camera controller script
 
         // Start is called before the first frame update
         void Start()
@@ -114,6 +113,10 @@ namespace Mattordev.UI
             }
         }
 
+        /// <summary>
+        /// Performs all of the actions needed to regenerate the table properly.
+        /// Clears, finds and then populates the table
+        /// </summary>
         public void RegenerateTable()
         {
             ClearTableItems();
@@ -127,6 +130,8 @@ namespace Mattordev.UI
 
         /// <summary>
         /// Finds all the attractors/bodies/planets
+        /// 
+        /// Might be worth making a general function for this to avoid repitition
         /// </summary>
         public void GetAttractors()
         {
