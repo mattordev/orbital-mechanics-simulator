@@ -15,10 +15,10 @@ namespace Mattordev.Utils.Stats
     public class StatisticsTracker : MonoBehaviour
     {
         public bool updateStats = true;
-        public GameObject sun;
 
         // Used for orbital period
         // Track the minimum and maximum distances between the two objects
+        [Header("Orbital Period Params")]
         public float minDistance = float.MaxValue;
         public float maxDistance = 0;
         public float periapsis = float.MaxValue; // Periapsis of the orbit in meters
@@ -64,7 +64,9 @@ namespace Mattordev.Utils.Stats
         Dictionary<string, float> objectDistances = new Dictionary<string, float>();
 
 
-        // Start is called before the first frame update
+        /// <summary>
+        /// Finds the Universe parameters, and gets some of the stats initially
+        /// </summary>
         void Start()
         {
             universeParameters = FindObjectOfType<UniverseParameters>();
@@ -72,7 +74,9 @@ namespace Mattordev.Utils.Stats
             GetClosestBody();
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Checks to see if the stats should be update, if they should, get them and then update the UI.
+        /// </summary>
         void Update()
         {
             if (updateStats)
@@ -88,6 +92,9 @@ namespace Mattordev.Utils.Stats
             }
         }
 
+        /// <summary>
+        /// Updates the UI for each stat. 
+        /// </summary>
         public void UpdateStats()
         {
             // General stats
@@ -108,6 +115,9 @@ namespace Mattordev.Utils.Stats
             selectedBodySpeedText.text = bodySpeed.ToString();
         }
 
+        /// <summary>
+        /// Gets the stats for all the objects in the scene
+        /// </summary>
         public void GetStats()
         {
             #region General
@@ -169,27 +179,6 @@ namespace Mattordev.Utils.Stats
             }
 
             return totalMassOfBodies;
-        }
-
-        private float GetSimRuntime()
-        {
-            return Time.timeSinceLevelLoad;
-        }
-
-        private float GetSimSpeed()
-        {
-            return Time.deltaTime;
-        }
-
-        // Universe Params
-        private float GetGravitationalConstant()
-        {
-            return universeParameters.gravitationalConstant;
-        }
-
-        private float GetPhysicsTimestep()
-        {
-            return universeParameters.physicsTimeStep;
         }
 
         // Selected Body
