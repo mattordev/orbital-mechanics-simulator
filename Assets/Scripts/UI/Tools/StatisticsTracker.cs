@@ -46,6 +46,7 @@ namespace Mattordev.Utils.Stats
         public string closestbody;
         public GameObject selectedBody;
 
+        // Text objects
         [Space]
         [Header("Text Objects")]
         public TMP_Text numberOfBodiesText;
@@ -168,6 +169,10 @@ namespace Mattordev.Utils.Stats
             totalMassOfBodies = GetTotalMass();
         }
 
+        /// <summary>
+        /// Gets the total mass of all of the bodies in the scene.
+        /// </summary>
+        /// <returns></returns>
         private int GetTotalMass()
         {
             foreach (Attractor body in attractors)
@@ -181,7 +186,12 @@ namespace Mattordev.Utils.Stats
             return totalMassOfBodies;
         }
 
-        // Selected Body
+        /// <summary>
+        /// Gets the selected body
+        /// 
+        /// If the camera isn't focused, sets it to itself. If the camera is focused, set it to the cameras parent.
+        /// </summary>
+        /// <returns></returns>
         public GameObject GetSelectedBody()
         {
             CameraController cameraController = FindObjectOfType<CameraController>();
@@ -199,6 +209,14 @@ namespace Mattordev.Utils.Stats
             return null;
         }
 
+
+        /// <summary>
+        /// Gets the closest body between two bodies, the selected body, closest.
+        /// 
+        /// Also has a small helper bit of code in here, when the console key is pressed, it will display a line
+        /// between the selected and the closest.
+        /// </summary>
+        /// <returns>closest objects name and distance</returns>
         private string GetClosestBody()
         {
             // Get the selected body
@@ -288,7 +306,11 @@ namespace Mattordev.Utils.Stats
 
         #endregion
 
-
+        /// <summary>
+        /// Returns the UI to its default state.
+        /// 
+        /// Might be able to remove
+        /// </summary>
         public void ResetSelectedToDefault()
         {
             selectedBody = null;
