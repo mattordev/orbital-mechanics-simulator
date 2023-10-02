@@ -17,14 +17,15 @@ namespace Mattordev.Utils
     /// </summary>
     public class EditObject : MonoBehaviour
     {
-        public GameObject objectToEdit;
-        public CameraController cameraController;
+        [Header("General")]
+        public GameObject objectToEdit; // The object that's going to be edited
+        public CameraController cameraController; // camera controller script   
 
-        public GameObject editWindow;
+        public GameObject editWindow; // Edit window UI
 
         // Get the selected objects colour
-        SpriteRenderer spriteRenderer;
-        public bool editingObject = false;
+        SpriteRenderer spriteRenderer; // Used with the color picker
+        public bool editingObject = false; // a check to see if we're editing an object
 
         [Header("UI Elements")]
         public TMP_InputField nameField;
