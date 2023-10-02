@@ -17,17 +17,30 @@ namespace Mattordev.Utils
     /// </summary>
     public class DeleteObject : MonoBehaviour
     {
-        private CameraController cameraController;
-        public bool deleting;
-        public TableGenerator tableGenerator;
+        private CameraController cameraController; // CameraController ref
+        public bool deleting; // Check for if we're deleting an object or not
+        public TableGenerator tableGenerator; // Table generatort script reference
 
-        // Start is called before the first frame update
+        /// <summary>
+        /// Start function.
+        /// only finds the cameraController script via the main camera.
+        /// </summary>
         void Start()
         {
             cameraController = Camera.main.GetComponent<CameraController>();
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Called everyframe.
+        /// Checks if the script is currently deleting something, then calls the relevant function for selecting the
+        /// body.
+        /// 
+        /// Checks for input on left click.
+        /// 
+        /// Then cleansup after deleting an object
+        /// 
+        /// Note: I know there's some broken logic in here SOMEWHERE, I need to go through and test it all again.
+        /// </summary>
         void Update()
         {
             if (deleting)
@@ -88,6 +101,7 @@ namespace Mattordev.Utils
             // Clear the bodies list and get it again
             // If this is uncommented the bodies will just go straight and not follow thier orbits
             // if it's uncommented there's an error but that's it.
+            // ^^^^^ not sure if this still makes the error (02/10/23), but not going to mess with it.
             bodySimulation.GetBodies();
             stats.attractors.Clear();
             stats.GetBodies();
