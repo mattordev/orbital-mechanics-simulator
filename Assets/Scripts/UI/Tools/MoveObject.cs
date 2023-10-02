@@ -18,11 +18,14 @@ namespace Mattordev.Utils
     /// </summary>
     public class MoveObject : MonoBehaviour
     {
-        public bool moving = false;
-        public GameObject selectedObject;
+        [Header("General")]
+        public bool moving = false; // check to see whether we're moving an object
+        public GameObject selectedObject; // the object that has been selected
 
-        public Camera mainCam;
-        public CameraController cameraController;
+        public Camera mainCam; // main camera
+        public CameraController cameraController; // camera controller script
+
+        // simtate pausing
         public StatisticsTracker statisticsTracker;
 
         List<Vector2> savedVelocities = new List<Vector2>();
@@ -33,7 +36,12 @@ namespace Mattordev.Utils
             mainCam = Camera.main;
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// FixedUpdate, runs at a locked speed.
+        /// 
+        /// If we're moving an object and there's a selected object set move it to the mouse position.
+        /// otherwise call the function to move the object to the mouse.
+        /// </summary>
         void FixedUpdate()
         {
             if (moving)
@@ -46,15 +54,27 @@ namespace Mattordev.Utils
             }
         }
 
+        /// <summary>
+        /// Tells the script that we're moving an object. 
+        /// 
+        /// Updates the status too.
+        /// </summary>
         public void StartObjectMove()
         {
             moving = true;
             StatusController.StatusMessage = "Pick an object to move...";
         }
 
+        /// <summary>
+        /// Move the body to the mouse using a raycast. Uses left click to select, right click to drop.
+        /// 
+        /// Might be cool to add smoothdamp, or make the tool a toggle so it toggles move mode and anything can be moved.
+        /// </summary>
         void MoveObjectToMouse()
         {
+            // Fire a ray from the camera to the mouse pos
             RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            // if the player clicks on an object, set the selectedObject as the clicked obj and update the status
             if (Input.GetMouseButtonDown(0) && hit.transform != null)
             {
                 selectedObject = hit.transform.gameObject;
