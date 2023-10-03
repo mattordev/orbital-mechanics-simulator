@@ -28,7 +28,6 @@ namespace Mattordev.Spaceship
         public KeyCode thrustForward = KeyCode.Space;
         public KeyCode rotateLeft = KeyCode.Q;
         public KeyCode rotateRight = KeyCode.E;
-        private bool isColliding = false;
 
         // Update is called once per frame
         void Update()
@@ -62,14 +61,20 @@ namespace Mattordev.Spaceship
             }
         }
 
-        // Function to smoothly rotate the object
-        // Function to smoothly rotate the object
+        /// <summary>
+        /// Function to smoothly rotate the ship using Rigidbody Torque.
+        /// </summary>
+        /// <param name="rotationAmount">the amount to rotate by.</param>
         private void RotateObject(float rotationAmount)
         {
             // Apply torque to the Rigidbody2D for rotation
             rb2D.AddTorque(rotationAmount * Time.fixedDeltaTime, ForceMode2D.Force);
         }
 
+        /// <summary>
+        /// Applies thrust via the Rigidbody whilst taking into account acceleration.
+        /// </summary>
+        /// <param name="thrusterForce">The force amount to apply</param>
         private void ApplyThrust(float thrusterForce)
         {
             float desiredAcceleration = thrusterForce / rb2D.mass;
@@ -80,6 +85,12 @@ namespace Mattordev.Spaceship
             rb2D.AddForce(transform.up * force, ForceMode2D.Force);
         }
 
+        /// <summary>
+        /// Used for slowing down the ship gradually. Cancels out velocity and Angular velocity.
+        /// 
+        /// Might be worth to split the dampening factor/amount for velocity and angular velocity.
+        /// </summary>
+        /// <param name="dampeningFactor">The amount of dampening to apply</param>
         private void ApplyInertialDampeners(float dampeningFactor)
         {
             // Calculate the dampening force based on the velocity
@@ -93,7 +104,7 @@ namespace Mattordev.Spaceship
             rb2D.AddForce(dampeningForce, ForceMode2D.Force);
 
             // Apply torque in the opposite direction to stop rotation
-            rb2D.AddTorque(-angularVelocity * dampeningFactor, ForceMode2D.Force);
+            rb2D.AddTorque(-angularVelocity * dampeningFactor * 2, ForceMode2D.Force);
         }
     }
 }
