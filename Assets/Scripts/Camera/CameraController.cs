@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Utils.Stats;
 using Mattordev.UI;
+using Mattordev.Spaceship;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -38,6 +39,9 @@ namespace Mattordev.Utils
         private Vector2 posVelocity;
         public bool focusing;
 
+        [Header("Other Controls")]
+        public KeyCode activationKey = KeyCode.E;
+
         // Other Variables
         [SerializeField] private AddObject addObject;
         [SerializeField] private MoveObject moveObject;
@@ -54,7 +58,7 @@ namespace Mattordev.Utils
         // Update is called once per frame
         void Update()
         {
-            MoveCameraWithKeyboardInput();
+            GetKeyboardInput();
             ZoomScale();
 
             // Focusing
@@ -113,6 +117,25 @@ namespace Mattordev.Utils
             mainCamera.transform.position += new Vector3(move.x, move.y);
         }
 
+        public void GetKeyboardInput()
+        {
+            if (IsControllableObject() && Input.GetKey(activationKey))
+            {
+                if (currentlyFocusedOn.tag == "Spaceship")
+                {
+                    SpaceshipController spaceshipController = currentlyFocusedOn.GetComponent<SpaceshipController>();
+                    // Invert the control check to toggle controls
+                    spaceshipController.controlling = !spaceshipController.controlling;
+                    StatusController.StatusMessage = "Controlling Spaceship, press \"E\" to stop";
+                }
+            }
+
+            if (!IsControllableObject())
+            {
+                MoveCameraWithKeyboardInput();
+            }
+        }
+
         private void FocusOnObject()
         {
             if (addObject.placing)
@@ -135,6 +158,7 @@ namespace Mattordev.Utils
             {
                 MoveToClickedTarget(hit.transform);
                 StatusController.StatusMessage = $"Focusing on {hit.transform.name}";
+                IsControllableObject();
             }
         }
 
@@ -175,6 +199,26 @@ namespace Mattordev.Utils
         public Vector2 GetMousePos()
         {
             return mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        /// <summary>
+        /// Checks to see whether the currently selected object is controllable.
+        /// If it is, enable the UI and wait for input.
+        /// </summary>
+        public bool IsControllableObject()
+        {
+            if (currentlyFocusedOn == null)
+            {
+                return false;
+            }
+            // If we're currently focused on a controllable object
+            if (currentlyFocusedOn.gameObject.tag == "Spaceship")
+            {
+                Debug.Log("Controllable selected");
+                StatusController.StatusMessage = "Press \"E\" to control this object.";
+                return true;
+            }
+            return false;
         }
     }
 }

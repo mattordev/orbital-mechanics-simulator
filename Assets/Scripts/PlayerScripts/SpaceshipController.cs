@@ -28,11 +28,15 @@ namespace Mattordev.Spaceship
         public KeyCode thrustForward = KeyCode.Space;
         public KeyCode rotateLeft = KeyCode.Q;
         public KeyCode rotateRight = KeyCode.E;
+        public bool controlling = false; // Dictates whether the spaceship is being controlled
 
         // Update is called once per frame
         void Update()
         {
-            GetInput();
+            if (controlling)
+            {
+                GetInput();
+            }
         }
 
         /// <summary>

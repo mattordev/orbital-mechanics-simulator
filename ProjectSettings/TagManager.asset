@@ -8,6 +8,7 @@ TagManager:
   - UtilityCanvas
   - HoverPanel
   - GameMaster
+  - Spaceship
   layers:
   - Default
   - TransparentFX
