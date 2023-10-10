@@ -29,6 +29,8 @@ namespace Mattordev.Spaceship
         public KeyCode rotateLeft = KeyCode.Q;
         public KeyCode rotateRight = KeyCode.E;
         public bool controlling = false; // Dictates whether the spaceship is being controlled
+        public ParticleSystem[] particleSystems; // The Particle systems the ship uses for its thrusters.
+        public GameObject thrusterLight;
 
         // Update is called once per frame
         void Update()
@@ -47,11 +49,18 @@ namespace Mattordev.Spaceship
             if (Input.GetKey(thrustForward))
             {
                 ApplyThrust(thrusterForce);
+
+                // VFX
+                particleSystems[0].Play();
+                thrusterLight.SetActive(true);
             }
             else
             {
                 // Apply inertial dampeners here when no thrust input
                 ApplyInertialDampeners(intertialDamperForce);
+
+                // VFX
+                thrusterLight.SetActive(false);
             }
 
             if (Input.GetKey(rotateLeft))
