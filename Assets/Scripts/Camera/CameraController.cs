@@ -127,6 +127,15 @@ namespace Mattordev.Utils
                     // Invert the control check to toggle controls
                     spaceshipController.controlling = !spaceshipController.controlling;
                     StatusController.StatusMessage = "Controlling Spaceship, press \"E\" to stop";
+
+                    // Listen, I'm not proud of these next few lines....
+                    ControllableUICanvasController controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
+                    Sprite sprite = currentlyFocusedOn.GetComponent<Sprite>();
+                    Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+                    // to fix, sprite not setting, speed only updates on control change
+                    controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
+                    // Enable the controllable canvas
+                    controllableUICanvas.showCanvas = true;
                 }
             }
 
@@ -158,7 +167,6 @@ namespace Mattordev.Utils
             {
                 MoveToClickedTarget(hit.transform);
                 StatusController.StatusMessage = $"Focusing on {hit.transform.name}";
-                IsControllableObject();
             }
         }
 
