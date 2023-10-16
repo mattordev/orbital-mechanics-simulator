@@ -128,6 +128,7 @@ namespace Mattordev.Utils
                     spaceshipController.controlling = !spaceshipController.controlling;
                     StatusController.StatusMessage = "Controlling Spaceship, press \"E\" to stop";
 
+                    // Need to update speed every frame, currently sprite isn't setting right either
                     // Listen, I'm not proud of these next few lines....
                     ControllableUICanvasController controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
                     Sprite sprite = currentlyFocusedOn.GetComponent<Sprite>();
