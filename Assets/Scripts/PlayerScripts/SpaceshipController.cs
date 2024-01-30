@@ -19,8 +19,11 @@ namespace Mattordev.Spaceship
         public float thrusterForce = 1000f;
 
         [Header("Ship Options")]
-        public bool inertialDampers = false;
+        public bool inertialDampeners = false;
         public float intertialDamperForce = 100f;
+
+        [Header("Keybinds")]
+        public KeyCode inertialDampenersKey = KeyCode.V;
 
         [Header("Other")]
         public SpriteRenderer spaceShipSprite;
@@ -56,8 +59,14 @@ namespace Mattordev.Spaceship
             }
             else
             {
-                // Apply inertial dampeners here when no thrust input
-                ApplyInertialDampeners(intertialDamperForce);
+                if (Input.GetKeyDown(inertialDampenersKey))
+                {
+                    inertialDampeners = !inertialDampeners;
+                }
+
+                if (inertialDampeners)
+                    // Apply inertial dampeners here when no thrust input
+                    ApplyInertialDampeners(intertialDamperForce);
 
                 // VFX
                 thrusterLight.SetActive(false);
