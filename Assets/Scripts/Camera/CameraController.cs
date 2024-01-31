@@ -48,6 +48,8 @@ namespace Mattordev.Utils
         [SerializeField] private EditObject editObject;
         [SerializeField] private StatisticsTracker statisticsTracker;
 
+        SpaceshipController spaceshipController;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -76,6 +78,11 @@ namespace Mattordev.Utils
             if (Input.GetButtonDown("Fire1"))
             {
                 FocusOnObject();
+            }
+
+            if (spaceshipController != null && spaceshipController.controlling)
+            {
+                UpdateShipUI();
             }
         }
 
@@ -119,24 +126,15 @@ namespace Mattordev.Utils
 
         public void GetKeyboardInput()
         {
-            if (IsControllableObject() && Input.GetKey(activationKey))
+            if (IsControllableObject() && Input.GetKeyUp(activationKey))
             {
+                Debug.Log("controllable object");
                 if (currentlyFocusedOn.tag == "Spaceship")
                 {
-                    SpaceshipController spaceshipController = currentlyFocusedOn.GetComponent<SpaceshipController>();
+                    spaceshipController = currentlyFocusedOn.GetComponent<SpaceshipController>();
                     // Invert the control check to toggle controls
                     spaceshipController.controlling = !spaceshipController.controlling;
                     StatusController.StatusMessage = "Controlling Spaceship, press \"E\" to stop";
-
-                    // Need to update speed every frame, currently sprite isn't setting right either
-                    // Listen, I'm not proud of these next few lines....
-                    ControllableUICanvasController controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
-                    Sprite sprite = currentlyFocusedOn.GetComponent<Sprite>();
-                    Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
-                    // to fix, sprite not setting, speed only updates on control change
-                    controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
-                    // Enable the controllable canvas
-                    controllableUICanvas.showCanvas = true;
                 }
             }
 
@@ -144,6 +142,23 @@ namespace Mattordev.Utils
             {
                 MoveCameraWithKeyboardInput();
             }
+        }
+
+        /// <summary>
+        /// Updates the ship controllable UI to show the correct elements
+        /// </summary>
+        public void UpdateShipUI()
+        {
+            // Need to update speed every frame, currently sprite isn't setting right either
+            // Listen, I'm not proud of these next few lines....
+            ControllableUICanvasController controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
+            SpriteRenderer spriteRenderer = currentlyFocusedOn.GetComponentInChildren<SpriteRenderer>();
+            Sprite sprite = spriteRenderer.sprite;
+            Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+            // to fix, sprite not setting, speed only updates on control change
+            controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
+            // Enable the controllable canvas
+            controllableUICanvas.showCanvas = true;
         }
 
         private void FocusOnObject()
@@ -223,7 +238,6 @@ namespace Mattordev.Utils
             // If we're currently focused on a controllable object
             if (currentlyFocusedOn.gameObject.tag == "Spaceship")
             {
-                Debug.Log("Controllable selected");
                 StatusController.StatusMessage = "Press \"E\" to control this object.";
                 return true;
             }

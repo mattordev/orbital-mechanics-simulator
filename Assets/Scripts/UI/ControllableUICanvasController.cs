@@ -48,13 +48,10 @@ namespace Mattordev.UI
 
         public void SetElements(Sprite controllableSprite, string name, float speed)
         {
-            if (cameraController.IsControllableObject())
-            {
-                Debug.Log(speed);
-                shipSprite.sprite = controllableSprite;
-                nameText.text = name;
-                speedText.text = speed.ToString();
-            }
+            shipSprite.sprite = controllableSprite;
+            nameText.text = name;
+            speedText.text = speed.ToString();
+
         }
     }
 }

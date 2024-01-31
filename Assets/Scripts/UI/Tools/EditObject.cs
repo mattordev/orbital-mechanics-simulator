@@ -77,7 +77,8 @@ namespace Mattordev.Utils
 
                 // Set the parameters to match what is already set on the body
                 spriteRenderer = objectToEdit.GetComponent<SpriteRenderer>();
-                colorPicker.SetColor(spriteRenderer.color);
+                if (spriteRenderer != null)
+                    colorPicker.SetColor(spriteRenderer.color);
 
                 nameField.text = objectToEdit.name;
                 Rigidbody2D rb2D = objectToEdit.GetComponent<Rigidbody2D>();
@@ -116,6 +117,8 @@ namespace Mattordev.Utils
         /// </summary>
         public void SetColor()
         {
+            if (spriteRenderer == null)
+                return;
             // set the color from the color picker
             spriteRenderer.color = colorPicker.color;
         }

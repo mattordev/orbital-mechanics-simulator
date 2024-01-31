@@ -19,18 +19,18 @@ namespace Mattordev.Spaceship
         public float thrusterForce = 1000f;
 
         [Header("Ship Options")]
-        public bool inertialDampeners = false;
+        public bool inertialDampeners = true;
         public float intertialDamperForce = 100f;
 
         [Header("Keybinds")]
+        public KeyCode thrustForward = KeyCode.Space;
+        public KeyCode rotateLeft = KeyCode.Q;
+        public KeyCode rotateRight = KeyCode.E;
         public KeyCode inertialDampenersKey = KeyCode.V;
 
         [Header("Other")]
         public SpriteRenderer spaceShipSprite;
         public Rigidbody2D rb2D;
-        public KeyCode thrustForward = KeyCode.Space;
-        public KeyCode rotateLeft = KeyCode.Q;
-        public KeyCode rotateRight = KeyCode.E;
         public bool controlling = false; // Dictates whether the spaceship is being controlled
         public ParticleSystem[] particleSystems; // The Particle systems the ship uses for its thrusters.
         public GameObject thrusterLight;

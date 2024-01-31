@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Mattordev.Universe;
+using Mattordev.Spaceship;
 using UnityEngine.UI;
 
 /// <author>
@@ -31,6 +32,7 @@ namespace Mattordev.UI
         // Needed for focusing
         [Header("Other")]
         public Attractor attractor; // The attractor focused on
+        public SpaceshipController satalite;
         public Button button;  // Button used for clicking on the table to focus on the body 
         public TableGenerator tableGenerator; // The table generator script
 
@@ -61,6 +63,22 @@ namespace Mattordev.UI
 
 
             nameText.text = attractor.gameObject.name;
+            massText.text = rb2D.mass.ToString();
+        }
+
+        /// <summary>
+        /// Populates the item fields with the correct parameters.
+        /// </summary>
+        /// <param name="satalite"> Attractor object, all other variables are gotten from this</param>
+        public void SetInfo(SpaceshipController satalite)
+        {
+            this.satalite = satalite;
+            rb2D = satalite.GetComponent<Rigidbody2D>();
+
+            SpriteRenderer spriteRenderer = satalite.GetComponentInChildren<SpriteRenderer>();
+            image.sprite = spriteRenderer.sprite;
+
+            nameText.text = satalite.gameObject.name;
             massText.text = rb2D.mass.ToString();
         }
 

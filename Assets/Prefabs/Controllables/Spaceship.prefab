@@ -99,8 +99,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 2000000
   thrusterForce: 2000
-  inertialDampers: 0
+  inertialDampeners: 0
   intertialDamperForce: 50
+  inertialDampenersKey: 118
   spaceShipSprite: {fileID: 2244305258846024462}
   rb2D: {fileID: 2244305256998518676}
   thrustForward: 119
@@ -109,7 +110,7 @@ MonoBehaviour:
   controlling: 0
   particleSystems:
   - {fileID: 296962908039287233}
-  thrusterLight: []
+  thrusterLight: {fileID: 0}
 --- !u!114 &2244305256998518678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +137,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 1649105553
   m_Mesh: {fileID: 0}
-  m_InstanceId: 98728
+  m_InstanceId: 30050
 --- !u!1 &2244305258846024461
 GameObject:
   m_ObjectHideFlags: 0
