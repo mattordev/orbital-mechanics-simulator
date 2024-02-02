@@ -47,6 +47,7 @@ namespace Mattordev.Utils
         [SerializeField] private MoveObject moveObject;
         [SerializeField] private EditObject editObject;
         [SerializeField] private StatisticsTracker statisticsTracker;
+        private ControllableUICanvasController controllableUICanvas;
 
         SpaceshipController spaceshipController;
 
@@ -55,6 +56,7 @@ namespace Mattordev.Utils
         {
             // Set the camera object to whatever the main camera is.
             mainCamera = Camera.main;
+            controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
         }
 
         // Update is called once per frame
@@ -83,6 +85,10 @@ namespace Mattordev.Utils
             if (spaceshipController != null && spaceshipController.controlling)
             {
                 UpdateShipUI();
+            }
+            else
+            {
+                controllableUICanvas.showCanvas = false;
             }
         }
 
@@ -151,7 +157,7 @@ namespace Mattordev.Utils
         {
             // Need to update speed every frame, currently sprite isn't setting right either
             // Listen, I'm not proud of these next few lines....
-            ControllableUICanvasController controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
+            controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
             SpriteRenderer spriteRenderer = currentlyFocusedOn.GetComponentInChildren<SpriteRenderer>();
             Sprite sprite = spriteRenderer.sprite;
             Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
