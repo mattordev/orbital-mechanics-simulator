@@ -82,6 +82,11 @@ namespace Mattordev.Utils
                 FocusOnObject();
             }
 
+
+        }
+
+        private void LateUpdate()
+        {
             if (spaceshipController != null && spaceshipController.controlling)
             {
                 UpdateShipUI();
@@ -161,7 +166,7 @@ namespace Mattordev.Utils
             SpriteRenderer spriteRenderer = currentlyFocusedOn.GetComponentInChildren<SpriteRenderer>();
             Sprite sprite = spriteRenderer.sprite;
             Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
-            // to fix, sprite not setting, speed only updates on control change
+
             controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
             // Enable the controllable canvas
             controllableUICanvas.showCanvas = true;
@@ -248,6 +253,23 @@ namespace Mattordev.Utils
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Returns the angle of the velocity of the currently focused on object.
+        /// </summary>
+        /// <returns></returns>
+        public float GetAngleOfVelocity()
+        {
+            if (currentlyFocusedOn == null)
+            {
+                return 0;
+            }
+            Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+            float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+            // Adjust the angle to match the pointer's convention
+            angle = (angle - 90 + 360) % 360;
+            return angle;
         }
     }
 }
