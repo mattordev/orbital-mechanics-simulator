@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mattordev.UI;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -34,13 +35,28 @@ namespace Mattordev.Spaceship
         public bool controlling = false; // Dictates whether the spaceship is being controlled
         public ParticleSystem[] particleSystems; // The Particle systems the ship uses for its thrusters.
         public GameObject thrusterLight;
+        public ControllableUICanvasController controllableUICanvas;
+
+        private void Start()
+        {
+            controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
+        }
 
         // Update is called once per frame
         void Update()
         {
+            // Update the velocity vector pointer on the UI regardless of whether the ship is being controlled or not.
+            controllableUICanvas.UpdateVelocityVectorPointer(rb2D.velocity.magnitude);
+
             if (controlling)
             {
                 GetInput();
+            }
+            else
+            {
+                // if the ship is not being controlled and interial dampeners are on, apply them.
+                if (inertialDampeners)
+                    ApplyInertialDampeners(intertialDamperForce);
             }
         }
 

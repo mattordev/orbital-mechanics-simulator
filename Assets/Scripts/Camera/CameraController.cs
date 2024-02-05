@@ -4,6 +4,7 @@ using UnityEngine;
 using Mattordev.Utils.Stats;
 using Mattordev.UI;
 using Mattordev.Spaceship;
+using UnityEditor.Callbacks;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -87,13 +88,19 @@ namespace Mattordev.Utils
 
         private void LateUpdate()
         {
-            if (spaceshipController != null && spaceshipController.controlling)
+            if (currentlyFocusedOn != null)
             {
-                UpdateShipUI();
-            }
-            else
-            {
-                controllableUICanvas.showCanvas = false;
+                // If we're currently focused on a spaceship and controlling it
+                if (spaceshipController != null && spaceshipController.controlling)
+                {
+                    // Update the UI
+                    UpdateShipUI();
+                }
+                else
+                {
+                    // If we're not controlling the spaceship, disable the UI
+                    controllableUICanvas.showCanvas = false;
+                }
             }
         }
 
@@ -152,6 +159,8 @@ namespace Mattordev.Utils
             if (!IsControllableObject())
             {
                 MoveCameraWithKeyboardInput();
+                if (spaceshipController)
+                    spaceshipController.controlling = false;
             }
         }
 
@@ -160,9 +169,13 @@ namespace Mattordev.Utils
         /// </summary>
         public void UpdateShipUI()
         {
+            if (currentlyFocusedOn == null)
+            {
+                return;
+            }
             // Need to update speed every frame, currently sprite isn't setting right either
             // Listen, I'm not proud of these next few lines....
-            controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
+
             SpriteRenderer spriteRenderer = currentlyFocusedOn.GetComponentInChildren<SpriteRenderer>();
             Sprite sprite = spriteRenderer.sprite;
             Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
@@ -211,10 +224,14 @@ namespace Mattordev.Utils
 
         public void MoveToClickedTarget(Transform target)
         {
+            // if (spaceshipController != null)
+            // {
+            //     // Set the camera rotation to the target's rotation
+            //     mainCamera.transform.rotation = spaceshipController.gameObject.transform.rotation;
+            // }
 
             // Tell the rest of the script that a planet has been focused
             focusing = true;
-
 
             // Set the inspector variable.
             currentlyFocusedOn = target.gameObject;
@@ -242,6 +259,9 @@ namespace Mattordev.Utils
         /// </summary>
         public bool IsControllableObject()
         {
+            // Reset the camera rotation
+            //mainCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
+
             if (currentlyFocusedOn == null)
             {
                 return false;
