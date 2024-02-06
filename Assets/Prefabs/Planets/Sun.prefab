@@ -7,6 +7,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 334480031202554091, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 334480031202554091, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_InstanceId
+      value: -51732
+      objectReference: {fileID: 0}
     - target: {fileID: 1746843667561929019, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
         type: 3}
       propertyPath: m_Sprite
@@ -37,6 +47,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210143920055906211, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210143920055906211, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210143920055906211, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5210143920055906211, guid: 3b9d87f52edf72f4f83f4bf50e9ea36a,
         type: 3}
