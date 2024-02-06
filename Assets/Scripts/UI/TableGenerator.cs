@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Universe;
 using Mattordev.Utils;
+using Mattordev.Spaceship;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -15,6 +16,7 @@ namespace Mattordev.UI
     {
         public GameObject tableItem { get; set; }
         public Attractor attractor { get; set; }
+        public GameObject satalites { get; set; }
     }
 
     /// <summary>
@@ -24,6 +26,7 @@ namespace Mattordev.UI
     {
         public List<GameObject> tableItems; // The items in the table
         public List<Attractor> attractors; // The list of bodies in the scene
+        public List<SpaceshipController> satalites; // any non planet object
         public GameObject TableItemPrefab; // The UI prefab to instantiate
         public GameObject content; // Scroll view content
 
@@ -51,18 +54,10 @@ namespace Mattordev.UI
             {
                 // Find the attractors in scene
                 GetAttractors();
+                GetSatalites();
 
-                foreach (Attractor attractor in attractors)
-                {
-                    // Spawns an empty item prefab
-                    GameObject item = Instantiate(TableItemPrefab, content.transform);
-                    // Set the item to be a child of content gameobject
-                    item.transform.SetParent(content.transform, false);
-                    Debug.Log($"Spawning {item.name}");
-                    // Get the info holder, pass in the attractor and call the SetInfo Function
-                    ItemInfoHolder info = item.GetComponent<ItemInfoHolder>();
-                    info.SetInfo(attractor);
-                }
+                GenerateTableItem();
+
                 // Find the table items in the scene, add them to the list.
                 FindTableItems();
                 // Mark the table as setup to avoid it being run again.
@@ -73,6 +68,33 @@ namespace Mattordev.UI
         }
 
         #region Table Item Getting/Cleaning
+
+        public void GenerateTableItem()
+        {
+            foreach (Attractor attractor in attractors)
+            {
+                // Spawns an empty item prefab
+                GameObject item = Instantiate(TableItemPrefab, content.transform);
+                // Set the item to be a child of content gameobject
+                item.transform.SetParent(content.transform, false);
+                Debug.Log($"Spawning {item.name}");
+                // Get the info holder, pass in the attractor and call the SetInfo Function
+                ItemInfoHolder info = item.GetComponent<ItemInfoHolder>();
+                info.SetInfo(attractor);
+            }
+
+            foreach (SpaceshipController satalite in satalites)
+            {
+                // Spawns an empty item prefab
+                GameObject item = Instantiate(TableItemPrefab, content.transform);
+                // Set the item to be a child of content gameobject
+                item.transform.SetParent(content.transform, false);
+                Debug.Log($"Spawning {item.name}");
+                // Get the info holder, pass in the attractor and call the SetInfo Function
+                ItemInfoHolder info = item.GetComponent<ItemInfoHolder>();
+                info.SetInfo(satalite);
+            }
+        }
 
         /// <summary>
         /// Clears the tableItems list, 
@@ -147,6 +169,20 @@ namespace Mattordev.UI
         }
 
         /// <summary>
+        /// Finds all NON Orbital bodies.
+        /// </summary>
+        public void GetSatalites()
+        {
+            satalites.Clear();
+
+            foreach (SpaceshipController satalite in FindObjectsOfType<SpaceshipController>())
+            {
+                satalites.Add(satalite);
+            }
+            Debug.Log($"Sucessfully found {satalites.Count} satalites");
+        }
+
+        /// <summary>
         /// Functions for the buttons, facilitates focusing on bodies that are listed in the table.
         /// </summary>
         public void TableClickToFocus(GameObject button)
@@ -154,7 +190,14 @@ namespace Mattordev.UI
             // Get reference to the info holder
             ItemInfoHolder itemTextHolder = button.GetComponent<ItemInfoHolder>();
             // Call the camera move
-            cameraController.MoveToClickedTarget(itemTextHolder.attractor.gameObject.transform);
+            try
+            {
+                cameraController.MoveToClickedTarget(itemTextHolder.attractor.gameObject.transform);
+            }
+            catch (System.NullReferenceException)
+            {
+                cameraController.MoveToClickedTarget(itemTextHolder.satalite.gameObject.transform);
+            }
         }
 
         #endregion

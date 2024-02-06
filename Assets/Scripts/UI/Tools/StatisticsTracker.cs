@@ -150,7 +150,14 @@ namespace Mattordev.Utils.Stats
             closestbody = GetClosestBody();
             //orbitalPeriod = OrbitalPeriod();
             Attractor selectedAttractor = selectedBody.GetComponent<Attractor>();
-            bodySpeed = selectedAttractor.rb.velocity.magnitude;
+            if (selectedAttractor)
+            {
+                bodySpeed = selectedAttractor.rb.velocity.magnitude;
+            }
+            else
+            {
+                bodySpeed = selectedBody.GetComponent<Rigidbody2D>().velocity.magnitude;
+            }
             #endregion
         }
 
