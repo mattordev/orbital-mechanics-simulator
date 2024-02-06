@@ -134,7 +134,7 @@ namespace Mattordev
                         // Subtract positions
                         var referenceFrameOffset = referenceBodyPosition - referenceBodyInitialPosition;
                         // Reset new pos to the initial
-                        newPos = referenceFrameOffset;
+                        newPos -= referenceFrameOffset;
                     }
                     if (relativeToBody && i == referenceFrameIndex)
                     {
