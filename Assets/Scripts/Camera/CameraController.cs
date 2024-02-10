@@ -42,13 +42,18 @@ namespace Mattordev.Utils
 
         [Header("Other Controls")]
         public KeyCode activationKey = KeyCode.E;
+        public KeyCode recenterKey = KeyCode.Space;
 
+
+        [Header("Tools & Other References")]
         // Other Variables
         [SerializeField] private AddObject addObject;
         [SerializeField] private MoveObject moveObject;
         [SerializeField] private EditObject editObject;
         [SerializeField] private StatisticsTracker statisticsTracker;
+        [SerializeField] private GameObject originPoint;
         private ControllableUICanvasController controllableUICanvas;
+
 
         SpaceshipController spaceshipController;
 
@@ -161,6 +166,11 @@ namespace Mattordev.Utils
                 MoveCameraWithKeyboardInput();
                 if (spaceshipController)
                     spaceshipController.controlling = false;
+
+                if (Input.GetKeyDown(recenterKey))
+                {
+                    currentlyFocusedOn = originPoint.gameObject;
+                }
             }
         }
 
@@ -285,11 +295,20 @@ namespace Mattordev.Utils
             {
                 return 0;
             }
-            Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
-            float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
-            // Adjust the angle to match the pointer's convention
-            angle = (angle - 90 + 360) % 360;
-            return angle;
+
+            // Check to see whether there is a RB component, if not, catch the error and return zero
+            try
+            {
+                Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+                float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+                // Adjust the angle to match the pointer's convention
+                angle = (angle - 90 + 360) % 360;
+                return angle;
+            }
+            catch (MissingComponentException)
+            {
+                return 0;
+            }
         }
     }
 }

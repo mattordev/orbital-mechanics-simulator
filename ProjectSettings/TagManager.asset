@@ -9,6 +9,7 @@ TagManager:
   - HoverPanel
   - GameMaster
   - Spaceship
+  - Origin
   layers:
   - Default
   - TransparentFX
