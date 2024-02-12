@@ -45,6 +45,7 @@ namespace Mattordev.UI
             addObject.enabled = false;
             deleteObject.enabled = false;
             moveObject.enabled = false;
+            editObject.enabled = false;
         }
 
         /// <summary>
@@ -82,6 +83,7 @@ namespace Mattordev.UI
             addObject.enabled = !addObject.enabled;
             deleteObject.enabled = !deleteObject.enabled;
             moveObject.enabled = !moveObject.enabled;
+            editObject.enabled = !editObject.enabled;
         }
 
         /// <summary>
