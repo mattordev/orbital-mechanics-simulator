@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 2000000
   thrusterForce: 2000
-  inertialDampeners: 0
+  inertialDampeners: 1
   intertialDamperForce: 50
   thrustForward: 119
   rotateLeft: 97
@@ -111,7 +111,8 @@ MonoBehaviour:
   controlling: 0
   particleSystems:
   - {fileID: 296962908039287233}
-  thrusterLight: {fileID: 0}
+  thrusterLight: {fileID: 5137536613639283732}
+  controllableUICanvas: {fileID: 0}
 --- !u!114 &2244305256998518678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +139,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 1649105553
   m_Mesh: {fileID: 0}
-  m_InstanceId: 170994
+  m_InstanceId: -11356
 --- !u!1 &2244305258846024461
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,11 +469,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1966985957
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e5d4b2a2d4f7f0a4d9d29612aaf020f2, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -512,22 +513,22 @@ PrefabInstance:
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5663426
+      value: 0.559193
       objectReference: {fileID: 0}
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.8241699
+      value: -0.82903755
       objectReference: {fileID: 0}
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
@@ -542,7 +543,7 @@ PrefabInstance:
     - target: {fileID: 966034494037222819, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -111.009
+      value: -112
       objectReference: {fileID: 0}
     - target: {fileID: 1154347332980368657, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
@@ -576,9 +577,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
         type: 3}
+      propertyPath: lengthInSec
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: ShapeModule.type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: LightsModule.range
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: LightsModule.ratio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
       propertyPath: LightsModule.enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: SizeModule.curve.scalar
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: LightsModule.randomDistribution
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1983165942965456208, guid: f07fcf43f70446744b190f437f53cc9d,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b510f3c9a2be2a43bc23897a7c14812,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 4122281003219758375, guid: f07fcf43f70446744b190f437f53cc9d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f07fcf43f70446744b190f437f53cc9d, type: 3}
