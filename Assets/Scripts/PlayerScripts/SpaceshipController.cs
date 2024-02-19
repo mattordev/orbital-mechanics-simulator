@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.UI;
+using Fungus;
+using UnityEngine.SceneManagement;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -36,15 +38,41 @@ namespace Mattordev.Spaceship
         public ParticleSystem[] particleSystems; // The Particle systems the ship uses for its thrusters.
         public GameObject thrusterLight;
         public ControllableUICanvasController controllableUICanvas;
+        public Flowchart teachingFlowchart;
+        public bool isTeaching = false;
 
         private void Start()
         {
+            // Check to see if we can find a teaching flowchart, if not, set the teaching bool to false. Otherwise, set it to true.
+            teachingFlowchart = FindObjectOfType<Flowchart>();
+            if (teachingFlowchart == null)
+                isTeaching = false;
+            else
+                isTeaching = true;
+
             controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (isTeaching)
+            {
+                // Set the flowchart speed variable to match the ship speed
+                teachingFlowchart.SetFloatVariable("shipSpeed", rb2D.velocity.magnitude);
+
+                if (controlling)
+                {
+                    // if we're controlling the ship, set the bool to tell the flowchart that we're controlling the ship.
+                    teachingFlowchart.SetBooleanVariable("controllingShip", true);
+                }
+                else
+                {
+                    // if we're not controlling the ship, set the bool to tell the flowchart that we're not controlling the ship.
+                    teachingFlowchart.SetBooleanVariable("controllingShip", false);
+                }
+            }
+
             // Update the velocity vector pointer on the UI regardless of whether the ship is being controlled or not.
             controllableUICanvas.UpdateVelocityVectorPointer(rb2D.velocity.magnitude);
 

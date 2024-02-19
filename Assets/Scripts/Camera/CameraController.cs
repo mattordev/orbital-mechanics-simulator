@@ -4,6 +4,7 @@ using UnityEngine;
 using Mattordev.Utils.Stats;
 using Mattordev.UI;
 using Mattordev.Spaceship;
+using Fungus;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -52,6 +53,8 @@ namespace Mattordev.Utils
         [SerializeField] private StatisticsTracker statisticsTracker;
         [SerializeField] private GameObject originPoint;
         private ControllableUICanvasController controllableUICanvas;
+        public Flowchart teachingFlowchart;
+        public bool isTeaching = false;
 
 
         SpaceshipController spaceshipController;
@@ -59,6 +62,13 @@ namespace Mattordev.Utils
         // Start is called before the first frame update
         void Start()
         {
+            // Check to see if we can find a teaching flowchart, if not, set the teaching bool to false. Otherwise, set it to true.
+            teachingFlowchart = FindObjectOfType<Flowchart>();
+            if (teachingFlowchart == null)
+                isTeaching = false;
+            else
+                isTeaching = true;
+
             // Set the camera object to whatever the main camera is.
             mainCamera = Camera.main;
             controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
@@ -82,12 +92,29 @@ namespace Mattordev.Utils
                 UpdateSmoothDampPos();
             }
 
-            if (Input.GetButtonDown("Fire1"))
+            // if we're teaching, check to see if we can focus on objects, if we're not allow focussing regardless
+            if (isTeaching)
             {
-                FocusOnObject();
+                // if the flowvar is set to true, allow the player to focus on objects
+                if (teachingFlowchart.GetBooleanVariable("canFocusOnObject") == true)
+                {
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        FocusOnObject();
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
-
-
+            else
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    FocusOnObject();
+                }
+            }
         }
 
         private void LateUpdate()
