@@ -230,14 +230,18 @@ namespace Mattordev.Utils
 
             RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
 
-            if (hit.transform == null && !editObject.editingObject)
+            if (!isTeaching)
             {
-                StatusController.StatusMessage = "Simulating...";
-                transform.parent = null;
-                currentlyFocusedOn = null;
-                focusing = false;
-                return;
+                if (hit.transform == null && !editObject.editingObject)
+                {
+                    StatusController.StatusMessage = "Simulating...";
+                    transform.parent = null;
+                    currentlyFocusedOn = null;
+                    focusing = false;
+                    return;
+                }
             }
+
 
             if (hit.transform != null)
             {
