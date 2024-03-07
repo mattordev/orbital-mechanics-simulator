@@ -41,7 +41,7 @@ namespace Mattordev
         void Update()
         {
 
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && universeParameters != null)
             {
                 DrawOrbits();
             }
@@ -216,7 +216,7 @@ namespace Mattordev
 
         private void OnValidate()
         {
-            if (usePhysicsTimeStep)
+            if (usePhysicsTimeStep && universeParameters != null)
             {
                 timeStep = universeParameters.physicsTimeStep;
             }

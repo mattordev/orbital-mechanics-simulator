@@ -22,7 +22,7 @@ namespace Mattordev.Utils
         public int maxScale = 100;
         public int minScale = 10;
         public int zoomSensitivity = 10;
-        private float currentScale;
+        public float currentScale;
 
         [Header("Camera Movement Variables")]
         public float xMovementSensitivity = 100f;
@@ -55,6 +55,7 @@ namespace Mattordev.Utils
         private ControllableUICanvasController controllableUICanvas;
         public Flowchart teachingFlowchart;
         public bool isTeaching = false;
+        public bool dummyMode = false;
 
 
         SpaceshipController spaceshipController;
@@ -77,14 +78,25 @@ namespace Mattordev.Utils
         // Update is called once per frame
         void Update()
         {
-            GetKeyboardInput();
-            ZoomScale();
+            if (dummyMode)
+            {
+                mainCamera.orthographicSize = currentScale;
+            }
+
+            if (!dummyMode)
+            {
+                GetKeyboardInput();
+                ZoomScale();
+            }
 
             // Focusing
             // make sure that we're not moving another object
-            if (moveObject.moving)
+            if (moveObject != null)
             {
-                return;
+                if (moveObject.moving)
+                {
+                    return;
+                }
             }
 
             if (focusing)
@@ -110,7 +122,7 @@ namespace Mattordev.Utils
             }
             else
             {
-                if (Input.GetButtonDown("Fire1"))
+                if (Input.GetButtonDown("Fire1") && !dummyMode)
                 {
                     FocusOnObject();
                 }
@@ -119,20 +131,24 @@ namespace Mattordev.Utils
 
         private void LateUpdate()
         {
-            if (currentlyFocusedOn != null)
+            if (!dummyMode)
             {
-                // If we're currently focused on a spaceship and controlling it
-                if (spaceshipController != null && spaceshipController.controlling)
+                if (currentlyFocusedOn != null)
                 {
-                    // Update the UI
-                    UpdateShipUI();
-                }
-                else
-                {
-                    // If we're not controlling the spaceship, disable the UI
-                    controllableUICanvas.showCanvas = false;
+                    // If we're currently focused on a spaceship and controlling it
+                    if (spaceshipController != null && spaceshipController.controlling)
+                    {
+                        // Update the UI
+                        UpdateShipUI();
+                    }
+                    else
+                    {
+                        // If we're not controlling the spaceship, disable the UI
+                        controllableUICanvas.showCanvas = false;
+                    }
                 }
             }
+
         }
 
         /// <summary>
@@ -223,9 +239,12 @@ namespace Mattordev.Utils
 
         private void FocusOnObject()
         {
-            if (addObject.placing)
+            if (addObject != null)
             {
-                return;
+                if (addObject.placing)
+                {
+                    return;
+                }
             }
 
             RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
