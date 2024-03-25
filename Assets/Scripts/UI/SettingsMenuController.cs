@@ -30,7 +30,8 @@ namespace Mattordev.UI
             int currentResoltionIndex = 0;
             for (int i = 0; i < resolutions.Length; i++)
             {
-                string option = resolutions[i].width + "x" + resolutions[i].height;
+                string option = $"{resolutions[i].width}x{resolutions[i].height}@{resolutions[i].refreshRate}Hz";
+
                 options.Add(option);
 
                 // Unity wont let me compare two resolutions directly, so we have to compare the WIDTH, then the HEIGHT.
