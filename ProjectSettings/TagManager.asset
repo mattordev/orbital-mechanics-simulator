@@ -8,6 +8,8 @@ TagManager:
   - UtilityCanvas
   - HoverPanel
   - GameMaster
+  - Spaceship
+  - Origin
   layers:
   - Default
   - TransparentFX
@@ -53,4 +55,7 @@ TagManager:
     locked: 0
   - name: Planets
     uniqueID: 2327981339
+    locked: 0
+  - name: Spaceships
+    uniqueID: 3213896807
     locked: 0

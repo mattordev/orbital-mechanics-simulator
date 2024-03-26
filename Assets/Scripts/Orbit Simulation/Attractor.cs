@@ -26,6 +26,10 @@ namespace Mattordev.Universe
 
         private void FixedUpdate()
         {
+            if (rb.isKinematic)
+            {
+                return;
+            }
             foreach (Attractor attractor in attractors)
             {
                 if (attractor != this)

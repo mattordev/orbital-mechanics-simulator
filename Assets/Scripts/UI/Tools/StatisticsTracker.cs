@@ -15,10 +15,10 @@ namespace Mattordev.Utils.Stats
     public class StatisticsTracker : MonoBehaviour
     {
         public bool updateStats = true;
-        public GameObject sun;
 
         // Used for orbital period
         // Track the minimum and maximum distances between the two objects
+        [Header("Orbital Period Params")]
         public float minDistance = float.MaxValue;
         public float maxDistance = 0;
         public float periapsis = float.MaxValue; // Periapsis of the orbit in meters
@@ -46,6 +46,7 @@ namespace Mattordev.Utils.Stats
         public string closestbody;
         public GameObject selectedBody;
 
+        // Text objects
         [Space]
         [Header("Text Objects")]
         public TMP_Text numberOfBodiesText;
@@ -64,7 +65,9 @@ namespace Mattordev.Utils.Stats
         Dictionary<string, float> objectDistances = new Dictionary<string, float>();
 
 
-        // Start is called before the first frame update
+        /// <summary>
+        /// Finds the Universe parameters, and gets some of the stats initially
+        /// </summary>
         void Start()
         {
             universeParameters = FindObjectOfType<UniverseParameters>();
@@ -72,7 +75,9 @@ namespace Mattordev.Utils.Stats
             GetClosestBody();
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Checks to see if the stats should be update, if they should, get them and then update the UI.
+        /// </summary>
         void Update()
         {
             if (updateStats)
@@ -88,6 +93,9 @@ namespace Mattordev.Utils.Stats
             }
         }
 
+        /// <summary>
+        /// Updates the UI for each stat. 
+        /// </summary>
         public void UpdateStats()
         {
             // General stats
@@ -108,6 +116,9 @@ namespace Mattordev.Utils.Stats
             selectedBodySpeedText.text = bodySpeed.ToString();
         }
 
+        /// <summary>
+        /// Gets the stats for all the objects in the scene
+        /// </summary>
         public void GetStats()
         {
             #region General
@@ -139,7 +150,14 @@ namespace Mattordev.Utils.Stats
             closestbody = GetClosestBody();
             //orbitalPeriod = OrbitalPeriod();
             Attractor selectedAttractor = selectedBody.GetComponent<Attractor>();
-            bodySpeed = selectedAttractor.rb.velocity.magnitude;
+            if (selectedAttractor)
+            {
+                bodySpeed = selectedAttractor.rb.velocity.magnitude;
+            }
+            else
+            {
+                bodySpeed = selectedBody.GetComponent<Rigidbody2D>().velocity.magnitude;
+            }
             #endregion
         }
 
@@ -158,6 +176,10 @@ namespace Mattordev.Utils.Stats
             totalMassOfBodies = GetTotalMass();
         }
 
+        /// <summary>
+        /// Gets the total mass of all of the bodies in the scene.
+        /// </summary>
+        /// <returns></returns>
         private int GetTotalMass()
         {
             foreach (Attractor body in attractors)
@@ -171,28 +193,12 @@ namespace Mattordev.Utils.Stats
             return totalMassOfBodies;
         }
 
-        private float GetSimRuntime()
-        {
-            return Time.timeSinceLevelLoad;
-        }
-
-        private float GetSimSpeed()
-        {
-            return Time.deltaTime;
-        }
-
-        // Universe Params
-        private float GetGravitationalConstant()
-        {
-            return universeParameters.gravitationalConstant;
-        }
-
-        private float GetPhysicsTimestep()
-        {
-            return universeParameters.physicsTimeStep;
-        }
-
-        // Selected Body
+        /// <summary>
+        /// Gets the selected body
+        /// 
+        /// If the camera isn't focused, sets it to itself. If the camera is focused, set it to the cameras parent.
+        /// </summary>
+        /// <returns></returns>
         public GameObject GetSelectedBody()
         {
             CameraController cameraController = FindObjectOfType<CameraController>();
@@ -210,6 +216,14 @@ namespace Mattordev.Utils.Stats
             return null;
         }
 
+
+        /// <summary>
+        /// Gets the closest body between two bodies, the selected body, closest.
+        /// 
+        /// Also has a small helper bit of code in here, when the console key is pressed, it will display a line
+        /// between the selected and the closest.
+        /// </summary>
+        /// <returns>closest objects name and distance</returns>
         private string GetClosestBody()
         {
             // Get the selected body
@@ -299,7 +313,11 @@ namespace Mattordev.Utils.Stats
 
         #endregion
 
-
+        /// <summary>
+        /// Returns the UI to its default state.
+        /// 
+        /// Might be able to remove
+        /// </summary>
         public void ResetSelectedToDefault()
         {
             selectedBody = null;
