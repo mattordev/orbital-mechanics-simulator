@@ -88,7 +88,7 @@ namespace Mattordev.UI
         private void Update()
         {
             // Update the speed val
-            speedText.text = rb2D.velocity.magnitude.ToString();
+            speedText.text = rb2D.velocity.magnitude.ToString("F2");
         }
     }
 }

@@ -99,21 +99,21 @@ namespace Mattordev.Utils.Stats
         public void UpdateStats()
         {
             // General stats
-            numberOfBodiesText.text = numberOfBodies.ToString();
-            totalMassOfBodiesText.text = totalMassOfBodies.ToString();
-            simulationRuntimeText.text = simulationRuntime.ToString();
-            simulationSpeedText.text = simulationSpeed.ToString();
+            numberOfBodiesText.text = numberOfBodies.ToString("F2");
+            totalMassOfBodiesText.text = totalMassOfBodies.ToString("F2");
+            simulationRuntimeText.text = simulationRuntime.ToString("F2");
+            simulationSpeedText.text = simulationSpeed.ToString("F3");
 
             // Universe params
-            gravitationalConstantText.text = gravitationalConstant.ToString();
-            physicsTimestepText.text = physicsTimestep.ToString();
+            gravitationalConstantText.text = gravitationalConstant.ToString("F2");
+            physicsTimestepText.text = physicsTimestep.ToString("F2");
 
             // Selected stats
-            selectedMassText.text = mass.ToString();
+            selectedMassText.text = mass.ToString("F2");
             selectedClosestBodyText.text = closestbody;
             // This will need to be fixed (see the xml summary of the function)
             selectedOrbitalPeriodText.text = "WIP";
-            selectedBodySpeedText.text = bodySpeed.ToString();
+            selectedBodySpeedText.text = bodySpeed.ToString("F2");
         }
 
         /// <summary>
