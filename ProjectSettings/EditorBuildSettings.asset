@@ -22,7 +22,10 @@ EditorBuildSettings:
     guid: 7c91f1113fa9f7f4da0d3dc3084cc576
   - enabled: 1
     path: Assets/Scenes/Scenarios/Empty.unity
-    guid: 031de1ffb0f548f43aeef0a6a1b7872e
+    guid: dcd4875526217e5438854f50f7787d74
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
