@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Mattordev.Utils;
+using Mattordev.Spaceship;
+using Unity.Mathematics;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -21,16 +23,19 @@ namespace Mattordev.UI
         public Image shipSprite;
         public GameObject velocityVectorPointer;
         public TMP_Text speedText;
+        public TMP_Text inertialDampenersText;
         public TMP_Text nameText;
 
         // Other
         private CameraController cameraController;
+        private SpaceshipController spaceshipController;
 
         // Start is called before the first frame update
         void Start()
         {
             showCanvas = false;
             cameraController = Camera.main.GetComponent<CameraController>();
+            spaceshipController = FindObjectOfType<SpaceshipController>();
         }
 
         // Update is called once per frame
@@ -50,7 +55,8 @@ namespace Mattordev.UI
         {
             shipSprite.sprite = controllableSprite;
             nameText.text = name;
-            speedText.text = speed.ToString();
+            speedText.text = speed.ToString("F2");
+            inertialDampenersText.text = spaceshipController.inertialDampeners ? "On" : "Off";
 
             UpdateVelocityVectorPointer(speed);
         }
