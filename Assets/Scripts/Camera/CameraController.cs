@@ -232,6 +232,9 @@ namespace Mattordev.Utils
             Sprite sprite = spriteRenderer.sprite;
             Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
 
+            Debug.Log(spriteRenderer);
+            Debug.Log(sprite);
+            Debug.Log(rb);
             controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
             // Enable the controllable canvas
             controllableUICanvas.showCanvas = true;
