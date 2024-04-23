@@ -19,17 +19,26 @@ namespace Mattordev.UI.Tools
         public string tooltip;
         public bool windowFocused;
 
-        public void Start()
-        {
-            //Application.focusChanged += () => panel.OnFocusChanged(IsHighlighted());
-        }
+        // Might need this in the future, can't remember what it was for specifically so leaving it in for now
+        // public void Start()
+        // {
+        //     //Application.focusChanged += () => panel.OnFocusChanged(IsHighlighted());
+        // }
 
+        /// <summary>
+        /// Base class for when the pointer hovers over the button
+        /// </summary>
+        /// <param name="eventData"></param>
         public override void OnPointerEnter(PointerEventData eventData)
         {
             panel.EnableTooltip(true, tooltip);
             base.OnPointerEnter(eventData);
         }
 
+        /// <summary>
+        /// Base class for when the pointer exits hovering over the button
+        /// </summary>
+        /// <param name="eventData"></param>
         public override void OnPointerExit(PointerEventData eventData)
         {
             panel.EnableTooltip(false);

@@ -17,14 +17,15 @@ namespace Mattordev.Utils
     /// </summary>
     public class EditObject : MonoBehaviour
     {
-        public GameObject objectToEdit;
-        public CameraController cameraController;
+        [Header("General")]
+        public GameObject objectToEdit; // The object that's going to be edited
+        public CameraController cameraController; // camera controller script   
 
-        public GameObject editWindow;
+        public GameObject editWindow; // Edit window UI
 
         // Get the selected objects colour
-        SpriteRenderer spriteRenderer;
-        public bool editingObject = false;
+        SpriteRenderer spriteRenderer; // Used with the color picker
+        public bool editingObject = false; // a check to see if we're editing an object
 
         [Header("UI Elements")]
         public TMP_InputField nameField;
@@ -74,9 +75,10 @@ namespace Mattordev.Utils
                 objectToEdit = hit.transform.gameObject;
                 editingObject = true;
 
-                // Set the parameters to match what is already set
+                // Set the parameters to match what is already set on the body
                 spriteRenderer = objectToEdit.GetComponent<SpriteRenderer>();
-                colorPicker.SetColor(spriteRenderer.color);
+                if (spriteRenderer != null)
+                    colorPicker.SetColor(spriteRenderer.color);
 
                 nameField.text = objectToEdit.name;
                 Rigidbody2D rb2D = objectToEdit.GetComponent<Rigidbody2D>();
@@ -115,6 +117,8 @@ namespace Mattordev.Utils
         /// </summary>
         public void SetColor()
         {
+            if (spriteRenderer == null)
+                return;
             // set the color from the color picker
             spriteRenderer.color = colorPicker.color;
         }

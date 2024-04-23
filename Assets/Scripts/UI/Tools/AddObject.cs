@@ -39,7 +39,10 @@ namespace Mattordev.Utils
         public GameObject velocityUI;
         private TMP_InputField inputField;
 
-        // Update is called once per frame
+        /// <summary>
+        /// Checks to see mainly if there is a new body being placed, if there is, handle the logic
+        /// like pausing the sim and amking sure everything stays in the correct place.
+        /// </summary>
         void Update()
         {
             // If an object is being placed..
@@ -75,6 +78,11 @@ namespace Mattordev.Utils
             }
         }
 
+
+        /// <summary>
+        /// used for setting object data on click. Mainly used by other scripts.
+        /// </summary>
+        /// <param name="selectedObj">the selected body</param>
         public void SelectedObject(GameObject selectedObj)
         {
             Debug.Log("Setting object");
@@ -82,6 +90,11 @@ namespace Mattordev.Utils
             objectData = selectedObj.GetComponent<ObjectData>();
         }
 
+        /// <summary>
+        /// the core function for placing objects. 
+        /// 
+        /// Pauses the simulation and then creates a new body either based on the users selection, or a base one.
+        /// </summary>
         public void PlaceObject()
         {
             // Pause sim
@@ -117,6 +130,9 @@ namespace Mattordev.Utils
         // Currently doesn't set velocity correctly.
         // 02.01.23 - I finally figured it out! it's because the planet is *techinically* being spawned in with
         // a velocity of zero, adding the speed to the "initial velocty" after instantiating it would never work.
+        /// <summary>
+        /// Sets the initial vel of a body. Needs more work to work properly.
+        /// </summary>
         public void SetInitialVelocity()
         {
             inputField = velocityUI.GetComponentInChildren<TMP_InputField>();
@@ -153,12 +169,19 @@ namespace Mattordev.Utils
             }
         }
 
+        /// <summary>
+        /// Instantiates a body with the correct postion, and rotation based on the prefab number
+        /// </summary>
+        /// <param name="prefabNumber">The prefab that is to be spawned.</param>
+        /// <returns></returns>
         GameObject InstantiateObject(int prefabNumber)
         {
-
             return Instantiate(objectPrefabs[prefabNumber], Vector3.zero, Quaternion.identity);
         }
 
+        /// <summary>
+        /// Updates the cameras postion to move it through using Smooth Damp
+        /// </summary>
         void UpdateSmoothDampPos()
         {
             // If we're not placing, return out of the function.
