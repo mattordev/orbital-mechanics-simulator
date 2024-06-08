@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mattordev.Utils.Stats;
 using Mattordev.Utils;
+using Fungus;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -15,6 +17,7 @@ namespace Mattordev.UI
     {
         [Header("General")]
         public KeyCode keyToActivate; // The key that activates the Utility window.
+        public Flowchart tutorialFlowchart; // The flowchart that is used for the tutorial.
 
         [Header("Canvas Elements")]
         public Canvas utilCanvas; // The Utility canvas obj.
@@ -35,6 +38,12 @@ namespace Mattordev.UI
         /// </summary>
         void Start()
         {
+            // Get ref to fungus flowchart if in tutorial scene
+            if (SceneManager.GetActiveScene().name == "Tutorial")
+            {
+                tutorialFlowchart = FindObjectOfType<Flowchart>();
+            }
+
             // Get ref to canvas and disable it at game start
             utilCanvas = GetComponent<Canvas>();
             utilCanvas.enabled = false;
@@ -75,6 +84,13 @@ namespace Mattordev.UI
         /// </summary>
         void Toggle()
         {
+            // Check to see if we're in the tutorial scene
+            if (SceneManager.GetActiveScene().name == "Tutorial")
+            {
+                // update the UI Open var for fungus
+                tutorialFlowchart.SetBooleanVariable("UIOpen", !tutorialFlowchart.GetBooleanVariable("UIOpen"));
+            }
+
             utilCanvas.enabled = !utilCanvas.enabled;
             statusWindow.enabled = !statusWindow.enabled;
 

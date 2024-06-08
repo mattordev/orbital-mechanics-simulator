@@ -5,6 +5,7 @@ using Mattordev.Universe;
 using Mattordev.UI;
 using Mattordev.Utils.Stats;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -39,6 +40,12 @@ namespace Mattordev.Utils
         public GameObject velocityUI;
         private TMP_InputField inputField;
 
+        private void Start()
+        {
+            // Find the camera controller
+            camController = Camera.main.GetComponent<CameraController>();
+        }
+
         /// <summary>
         /// Checks to see mainly if there is a new body being placed, if there is, handle the logic
         /// like pausing the sim and amking sure everything stays in the correct place.
@@ -70,8 +77,6 @@ namespace Mattordev.Utils
                 orbitDisplay.enabled = true;
                 orbitDisplay.hideOrbitPathsOnPlay = false;
                 orbitDisplay.useThickLines = true;
-
-
 
                 // enable UI to enter speed ?? enable drag to scale speed?
                 velocityUI.SetActive(true);
