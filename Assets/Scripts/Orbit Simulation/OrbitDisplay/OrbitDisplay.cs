@@ -41,7 +41,7 @@ namespace Mattordev
         void Update()
         {
 
-            if (!Application.isPlaying)
+            if (!Application.isPlaying && universeParameters != null)
             {
                 DrawOrbits();
             }
@@ -134,7 +134,7 @@ namespace Mattordev
                         // Subtract positions
                         var referenceFrameOffset = referenceBodyPosition - referenceBodyInitialPosition;
                         // Reset new pos to the initial
-                        newPos = referenceFrameOffset;
+                        newPos -= referenceFrameOffset;
                     }
                     if (relativeToBody && i == referenceFrameIndex)
                     {
@@ -216,7 +216,7 @@ namespace Mattordev
 
         private void OnValidate()
         {
-            if (usePhysicsTimeStep)
+            if (usePhysicsTimeStep && universeParameters != null)
             {
                 timeStep = universeParameters.physicsTimeStep;
             }

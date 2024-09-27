@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mattordev.Utils.Stats;
 using Mattordev.UI;
+using Mattordev.Spaceship;
+using Fungus;
 
 /// <author>
 /// Authored & Written by @mattordev
@@ -20,7 +22,7 @@ namespace Mattordev.Utils
         public int maxScale = 100;
         public int minScale = 10;
         public int zoomSensitivity = 10;
-        private float currentScale;
+        public float currentScale;
 
         [Header("Camera Movement Variables")]
         public float xMovementSensitivity = 100f;
@@ -38,30 +40,63 @@ namespace Mattordev.Utils
         private Vector2 posVelocity;
         public bool focusing;
 
+        [Header("Other Controls")]
+        public KeyCode activationKey = KeyCode.E;
+        public KeyCode recenterKey = KeyCode.Space;
+
+
+        [Header("Tools & Other References")]
         // Other Variables
         [SerializeField] private AddObject addObject;
         [SerializeField] private MoveObject moveObject;
         [SerializeField] private EditObject editObject;
         [SerializeField] private StatisticsTracker statisticsTracker;
+        [SerializeField] private GameObject originPoint;
+        private ControllableUICanvasController controllableUICanvas;
+        public Flowchart teachingFlowchart;
+        public bool isTeaching = false;
+        public bool dummyMode = false;
+
+
+        SpaceshipController spaceshipController;
 
         // Start is called before the first frame update
         void Start()
         {
+            // Check to see if we can find a teaching flowchart, if not, set the teaching bool to false. Otherwise, set it to true.
+            teachingFlowchart = FindObjectOfType<Flowchart>();
+            if (teachingFlowchart == null)
+                isTeaching = false;
+            else
+                isTeaching = true;
+
             // Set the camera object to whatever the main camera is.
             mainCamera = Camera.main;
+            controllableUICanvas = FindObjectOfType<ControllableUICanvasController>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            MoveCameraWithKeyboardInput();
-            ZoomScale();
+            if (dummyMode)
+            {
+                mainCamera.orthographicSize = currentScale;
+            }
+
+            if (!dummyMode)
+            {
+                GetKeyboardInput();
+                ZoomScale();
+            }
 
             // Focusing
             // make sure that we're not moving another object
-            if (moveObject.moving)
+            if (moveObject != null)
             {
-                return;
+                if (moveObject.moving)
+                {
+                    return;
+                }
             }
 
             if (focusing)
@@ -69,10 +104,51 @@ namespace Mattordev.Utils
                 UpdateSmoothDampPos();
             }
 
-            if (Input.GetButtonDown("Fire1"))
+            // if we're teaching, check to see if we can focus on objects, if we're not allow focussing regardless
+            if (isTeaching)
             {
-                FocusOnObject();
+                // if the flowvar is set to true, allow the player to focus on objects
+                if (teachingFlowchart.GetBooleanVariable("canFocusOnObject") == true)
+                {
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        FocusOnObject();
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
+            else
+            {
+                if (Input.GetButtonDown("Fire1") && !dummyMode)
+                {
+                    FocusOnObject();
+                }
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (!dummyMode)
+            {
+                if (currentlyFocusedOn != null)
+                {
+                    // If we're currently focused on a spaceship and controlling it
+                    if (spaceshipController != null && spaceshipController.controlling)
+                    {
+                        // Update the UI
+                        UpdateShipUI();
+                    }
+                    else
+                    {
+                        // If we're not controlling the spaceship, disable the UI
+                        controllableUICanvas.showCanvas = false;
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -113,23 +189,81 @@ namespace Mattordev.Utils
             mainCamera.transform.position += new Vector3(move.x, move.y);
         }
 
-        private void FocusOnObject()
+        public void GetKeyboardInput()
         {
-            if (addObject.placing)
+            if (IsControllableObject() && Input.GetKeyUp(activationKey))
+            {
+                Debug.Log("controllable object");
+                if (currentlyFocusedOn.tag == "Spaceship")
+                {
+                    spaceshipController = currentlyFocusedOn.GetComponent<SpaceshipController>();
+                    // Invert the control check to toggle controls
+                    spaceshipController.controlling = !spaceshipController.controlling;
+                    StatusController.StatusMessage = "Controlling Spaceship, press \"E\" to stop";
+                }
+            }
+
+            if (!IsControllableObject())
+            {
+                MoveCameraWithKeyboardInput();
+                if (spaceshipController)
+                    spaceshipController.controlling = false;
+
+                if (Input.GetKeyDown(recenterKey))
+                {
+                    currentlyFocusedOn = originPoint.gameObject;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the ship controllable UI to show the correct elements
+        /// </summary>
+        public void UpdateShipUI()
+        {
+            if (currentlyFocusedOn == null)
             {
                 return;
+            }
+            // Need to update speed every frame, currently sprite isn't setting right either
+            // Listen, I'm not proud of these next few lines....
+
+            SpriteRenderer spriteRenderer = currentlyFocusedOn.GetComponentInChildren<SpriteRenderer>();
+            Sprite sprite = spriteRenderer.sprite;
+            Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+
+            Debug.Log(spriteRenderer);
+            Debug.Log(sprite);
+            Debug.Log(rb);
+            controllableUICanvas.SetElements(sprite, currentlyFocusedOn.gameObject.name, rb.velocity.magnitude);
+            // Enable the controllable canvas
+            controllableUICanvas.showCanvas = true;
+        }
+
+        private void FocusOnObject()
+        {
+            if (addObject != null)
+            {
+                if (addObject.placing)
+                {
+                    return;
+                }
             }
 
             RaycastHit2D hit = Physics2D.Raycast(GetMousePos(), Vector2.zero);
 
-            if (hit.transform == null && !editObject.editingObject)
+            if (!isTeaching)
             {
-                StatusController.StatusMessage = "Simulating...";
-                transform.parent = null;
-                currentlyFocusedOn = null;
-                focusing = false;
-                return;
+                if (hit.transform == null && !editObject.editingObject)
+                {
+                    StatusController.StatusMessage = "Simulating...";
+                    transform.parent = null;
+                    currentlyFocusedOn = null;
+                    focusing = false;
+                    return;
+                }
             }
+
 
             if (hit.transform != null)
             {
@@ -152,10 +286,14 @@ namespace Mattordev.Utils
 
         public void MoveToClickedTarget(Transform target)
         {
+            // if (spaceshipController != null)
+            // {
+            //     // Set the camera rotation to the target's rotation
+            //     mainCamera.transform.rotation = spaceshipController.gameObject.transform.rotation;
+            // }
 
             // Tell the rest of the script that a planet has been focused
             focusing = true;
-
 
             // Set the inspector variable.
             currentlyFocusedOn = target.gameObject;
@@ -175,6 +313,54 @@ namespace Mattordev.Utils
         public Vector2 GetMousePos()
         {
             return mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        /// <summary>
+        /// Checks to see whether the currently selected object is controllable.
+        /// If it is, enable the UI and wait for input.
+        /// </summary>
+        public bool IsControllableObject()
+        {
+            // Reset the camera rotation
+            //mainCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+            if (currentlyFocusedOn == null)
+            {
+                return false;
+            }
+            // If we're currently focused on a controllable object
+            if (currentlyFocusedOn.gameObject.tag == "Spaceship")
+            {
+                StatusController.StatusMessage = "Press \"E\" to control this object.";
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the angle of the velocity of the currently focused on object.
+        /// </summary>
+        /// <returns></returns>
+        public float GetAngleOfVelocity()
+        {
+            if (currentlyFocusedOn == null)
+            {
+                return 0;
+            }
+
+            // Check to see whether there is a RB component, if not, catch the error and return zero
+            try
+            {
+                Rigidbody2D rb = currentlyFocusedOn.GetComponent<Rigidbody2D>();
+                float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+                // Adjust the angle to match the pointer's convention
+                angle = (angle - 90 + 360) % 360;
+                return angle;
+            }
+            catch (MissingComponentException)
+            {
+                return 0;
+            }
         }
     }
 }
